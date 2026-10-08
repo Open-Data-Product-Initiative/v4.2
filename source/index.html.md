@@ -99,7 +99,11 @@ The content is modular, code‑first, and designed for easy reuse, enabling team
 
 [Knowledge Base in Github](https://opendataproducts.org/howto/). 
 
-[Udemy course - Master the Leading Data Product Specification with GPT tool](https://www.udemy.com/course/master-the-open-data-product-specification-with-gpt-tool)
+**Official Data Product SDK course:** [Scalable Data Product Value Management with Agent Ready SDK](https://www.udemy.com/course/scalable-data-product-value-management-with-agent-ready-sdk/?referralCode=DE23AF7C13D47E90B996)
+
+Learn how to use the Open Data Products SDK—an AI-agent-first Python toolkit for designing, validating, managing, and operationalizing data products using the ODPS specification family. The course covers the SDK's CLI, MCP server, and AI-assisted workflows.
+
+[Take the official SDK course on Udemy](https://www.udemy.com/course/scalable-data-product-value-management-with-agent-ready-sdk/?referralCode=DE23AF7C13D47E90B996)
 
 ## Specification aims and aspects
 
