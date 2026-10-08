@@ -384,9 +384,6 @@
             <a href="#data-contract" class="toc-h1 toc-link" data-title="Data Contract">Data Contract</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#legacy-singleton-compatibility" class="toc-h2 toc-link" data-title="Legacy singleton compatibility">Legacy singleton compatibility</a>
-                  </li>
-                  <li>
                     <a href="#optional-attributes-and-elements" class="toc-h2 toc-link" data-title="Optional attributes and elements">Optional attributes and elements</a>
                   </li>
               </ul>
@@ -500,7 +497,16 @@
             <a href="#odps-4-1-4-2-migration-guide" class="toc-h1 toc-link" data-title="ODPS 4.1 → 4.2 Migration Guide">ODPS 4.1 → 4.2 Migration Guide</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#migrating-a-singleton-data-contract" class="toc-h2 toc-link" data-title="Migrating a singleton Data Contract">Migrating a singleton Data Contract</a>
+                    <a href="#required-contract-migration" class="toc-h2 toc-link" data-title="Required Contract migration">Required Contract migration</a>
+                  </li>
+                  <li>
+                    <a href="#required-data-access-migration" class="toc-h2 toc-link" data-title="Required Data Access migration">Required Data Access migration</a>
+                  </li>
+                  <li>
+                    <a href="#external-profile-packages" class="toc-h2 toc-link" data-title="External profile packages">External profile packages</a>
+                  </li>
+                  <li>
+                    <a href="#migration-checklist" class="toc-h2 toc-link" data-title="Migration checklist">Migration checklist</a>
                   </li>
                   <li>
                     <a href="#earlier-odps-4-0-4-1-migration" class="toc-h2 toc-link" data-title="Earlier ODPS 4.0 → 4.1 migration">Earlier ODPS 4.0 → 4.1 migration</a>
@@ -596,7 +602,7 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <li>Auditability: Clearly link machine-readable checks to business commitments.</li>
 </ul>
 
-<p><strong>ODPS 4.2 introduces named Data Contract profiles.</strong> An inline profile collection requires <code>default</code>, supports additional contractual contexts such as <code>internal</code> or <code>restricted</code>, and can be maintained as an external package. Each Data Access profile may reference the applicable contract profile, allowing one contract to govern several interfaces without duplication. The ODPS 4.1 singleton Contract syntax remains valid for backward compatibility.</p>
+<p><strong>ODPS 4.2 introduces named Data Contract profiles.</strong> An inline profile collection requires <code>default</code>, supports additional contractual contexts such as <code>internal</code> or <code>restricted</code>, and can be maintained as an external package. Each Data Access profile may reference the applicable contract profile, allowing one contract to govern several interfaces without duplication.</p>
 
 <p><strong>ODPS 4.1 introduced the productStrategy object</strong>, a significant extension that connects data products to business intent, objectives, and KPIs. That release made ODPS the first open specification where data products declare not just what they are but also why they exist and how success is measured.</p>
 
@@ -1179,9 +1185,9 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <li><strong>Traceability:</strong> use shared KPI <code>id</code>s to enable cross‑product roll‑ups against the same business KPI.</li>
 </ul>
 <h1 id='data-contract'>Data Contract</h1>
-<p>The OPTIONAL <code>product.contract</code> object declares the formal data contracts that govern a data product. ODPS 4.2 supports reusable, named Data Contract profiles. New implementations SHOULD use the profile form so that Data Access interfaces can state which contractual context applies.</p>
+<p>The OPTIONAL <code>product.contract</code> object declares the formal data contracts that govern a data product. ODPS 4.2 uses reusable, named Data Contract profiles so that Data Access interfaces can state which contractual context applies.</p>
 
-<p>When contract profiles are defined inline, a profile named <code>default</code> is REQUIRED. One or more additional profiles may be added with names chosen by the publisher. Each profile uses the existing Contract object; ODPS does not define a second contract model.</p>
+<p>When <code>contract</code> is defined inline, a profile named <code>default</code> is REQUIRED. The singleton Contract form is not valid in ODPS 4.2. One or more additional profiles may be added with names chosen by the publisher. Each profile uses the existing Contract object; ODPS does not define a second contract model.</p>
 
 <blockquote>
 <p>Example of named Data Contract profiles:</p>
@@ -1237,17 +1243,6 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <p>The same contract profile MAY be referenced by several Data Access profiles. This enables define-once, reference-many governance without copying a complete Contract object into each access definition.</p>
 
 <p>Complete examples are available for <a href="examples/DataContract/contract-profiles.yml">named profiles</a>, <a href="examples/DataContract/contract-access-reference.yml">Data Access bindings</a>, <a href="examples/DataContract/contract-external-profile.yml">an external individual profile</a>, <a href="examples/DataContract/datacontract-inline.yml">inline contract content</a>, and <a href="examples/DataContract/contract-profiles-package.yml">an external profile package</a>.</p>
-<h3 id='legacy-singleton-compatibility'>Legacy singleton compatibility</h3>
-<p>The ODPS 4.1 singleton form remains valid in ODPS 4.2 for backward compatibility:</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-001</span>
-  <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
-  <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
-  <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default</span>
-</code></pre></div>
-<p>The singleton metadata, inline <code>spec</code>, and external <code>$ref</code> forms remain accepted. A legacy singleton <code>$ref</code> and a v4.2 external profile-package <code>$ref</code> have the same wrapper shape; tools that resolve external content determine whether the target is one Contract or a profile collection. For new documents, a <code>$ref</code> directly under <code>product.contract</code> SHOULD target a profile package.</p>
-
-<p>The singleton form is deprecated for new implementations because it cannot express several reusable contractual contexts or explicit Data Access-to-contract relationships. Existing documents do not need to migrate unless they need those capabilities.</p>
 <h2 id='optional-attributes-and-elements'>Optional attributes and elements</h2>
 <table><thead>
 <tr>
@@ -1260,14 +1255,14 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <tr>
 <td><strong>contract</strong></td>
 <td>object</td>
-<td>legacy Contract, named profiles, or package <code>$ref</code></td>
-<td>OPTIONAL collection of Data Contract profiles. Inline profile collections MUST contain <code>default</code>. The legacy singleton Contract remains valid for compatibility.</td>
+<td>named profiles or package <code>$ref</code></td>
+<td>OPTIONAL collection of Data Contract profiles. An inline collection MUST contain <code>default</code>.</td>
 </tr>
 <tr>
 <td><strong>default</strong></td>
 <td>Contract</td>
 <td>-</td>
-<td>REQUIRED only when the named profile form is used inline. It is the primary contractual context.</td>
+<td>REQUIRED for an inline profile collection. It is the primary contractual context.</td>
 </tr>
 <tr>
 <td><strong>&lt;profile&gt;</strong></td>
@@ -2186,7 +2181,7 @@ pricingPlans:
   <span class="na">executable</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Premium subscription 1 year</span>
       <span class="na">type</span><span class="pi">:</span> <span class="s">Stripe</span>
-      <span class="na">reference</span><span class="pi">:</span> <span class="s">urls to Stripe docs</span>
+      <span class="na">reference</span><span class="pi">:</span> <span class="s">https://docs.stripe.com/api</span>
       <span class="na">create</span><span class="pi">:</span>
         <span class="na">spec</span><span class="pi">:</span>
           <span class="pi">-</span> <span class="na">cmd</span><span class="pi">:</span> <span class="s">stripe products create  \</span>
@@ -2632,6 +2627,8 @@ pricingPlans:
 <h1 id='data-access'>Data Access</h1>
 <p>The <code>dataAccess</code> object defines how users—or machines—can technically access the data product. It allows publishers to describe <strong>multiple, named access methods</strong> tailored to different consumer needs: from simple file downloads and APIs to AI agent integration via protocols like <strong>MCP</strong>.</p>
 
+<p>When <code>dataAccess</code> is defined inline, it MUST include an access profile named <code>default</code>. A root <code>$ref</code> may instead load an external profile package; that package MUST include <code>default</code>.</p>
+
 <p>Each entry under <code>dataAccess</code> (such as <code>default</code>, <code>API</code>, or <code>Agent</code>) represents a distinct access interface with its own metadata, authentication requirements, and documentation references. This structure makes it possible to:</p>
 
 <ul>
@@ -2661,7 +2658,7 @@ pricingPlans:
       <span class="na">en</span><span class="pi">:</span> <span class="s">Latest Dataset and Resources</span>
     <span class="na">outputPortType</span><span class="pi">:</span> <span class="s">file</span>
     <span class="na">format</span><span class="pi">:</span> <span class="s">zip</span>
-    <span class="na">accessURL</span><span class="pi">:</span> <span class="s">url to file as zip</span>
+    <span class="na">accessURL</span><span class="pi">:</span> <span class="s">https://example.org/data/latest-dataset.zip</span>
   <span class="na">dataonly</span><span class="pi">:</span>
     <span class="na">name</span><span class="pi">:</span>
       <span class="na">en</span><span class="pi">:</span> <span class="s">Access to latest dataset</span>
@@ -2669,7 +2666,7 @@ pricingPlans:
       <span class="na">en</span><span class="pi">:</span> <span class="s">Latest Dataset</span>
     <span class="na">outputPortType</span><span class="pi">:</span> <span class="s">file</span>
     <span class="na">format</span><span class="pi">:</span> <span class="s">CSV</span>
-    <span class="na">accessURL</span><span class="pi">:</span> <span class="s">url to file as CSV</span>
+    <span class="na">accessURL</span><span class="pi">:</span> <span class="s">https://example.org/data/latest-dataset.csv</span>
   <span class="na">API</span><span class="pi">:</span>
     <span class="na">name</span><span class="pi">:</span>
       <span class="na">en</span><span class="pi">:</span> <span class="s">Access to API</span>
@@ -3928,16 +3925,16 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
 
 <p>If you see something missing, described inaccurately or plain wrong, or you want to comment the specification, <a href="https://github.com/Open-Data-Product-Initiative/dev/issues">raise an issue in Github</a></p>
 <h1 id='odps-4-1-4-2-migration-guide'>ODPS 4.1 → 4.2 Migration Guide</h1>
-<p>ODPS 4.2 is a minor, backward-compatible update. Existing ODPS 4.1 documents that use a singleton <code>product.contract</code> remain valid without modification.</p>
-<h2 id='migrating-a-singleton-data-contract'>Migrating a singleton Data Contract</h2>
-<p>The ODPS 4.1 singleton form remains supported:</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-001</span>
-  <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
-  <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
-  <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default</span>
+<p>ODPS 4.2 requires named Contract profiles. This is a breaking change for existing ODPS 4.1 documents that use a singleton <code>product.contract</code>: they must move that Contract under the required <code>default</code> profile.</p>
+<h2 id='required-contract-migration'>Required Contract migration</h2>
+<p>ODPS 4.1 used a singleton form:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>contract:
+  id: CONTRACT-001
+  type: ODCS
+  contractVersion: 2.2.2
+  contractURL: https://example.org/contracts/default
 </code></pre></div>
-<p>For new ODPS 4.2 implementations, place the Contract object under the required <code>default</code> profile:</p>
+<p>In ODPS 4.2, place the Contract object under the required <code>default</code> profile:</p>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
   <span class="na">default</span><span class="pi">:</span>
     <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-001</span>
@@ -3945,14 +3942,60 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
     <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
     <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default</span>
 </code></pre></div>
-<p>Once profiles are used, a Data Access interface can explicitly reference the contract that governs it:</p>
+<p>Do not retain the singleton fields alongside <code>default</code>; the following shape is invalid:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>contract:
+  id: CONTRACT-001
+  default:
+    id: CONTRACT-001
+</code></pre></div>
+<p>Additional named profiles are optional, but every inline Contract collection starts with <code>default</code>.</p>
+<h2 id='required-data-access-migration'>Required Data Access migration</h2>
+<p>Every inline <code>dataAccess</code> collection must contain <code>default</code>. If an existing document has only a profile such as <code>API</code>, rename that profile to <code>default</code> or add a separate default access profile.</p>
+<div class="highlight"><pre class="highlight plaintext"><code># Invalid in ODPS 4.2: default is missing
+dataAccess:
+  API:
+    outputPortType: API
+</code></pre></div><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="c1"># Valid in ODPS 4.2</span>
+<span class="na">dataAccess</span><span class="pi">:</span>
+  <span class="na">default</span><span class="pi">:</span>
+    <span class="na">outputPortType</span><span class="pi">:</span> <span class="s">API</span>
+</code></pre></div>
+<p>Each inline access profile must also declare <code>outputPortType</code>. A Data Access interface may then explicitly reference the Contract profile that governs it:</p>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">dataAccess</span><span class="pi">:</span>
+  <span class="na">default</span><span class="pi">:</span>
+    <span class="na">outputPortType</span><span class="pi">:</span> <span class="s">API</span>
+    <span class="na">contract</span><span class="pi">:</span>
+      <span class="s">$ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">#/product/contract/default'</span>
   <span class="na">API</span><span class="pi">:</span>
     <span class="na">outputPortType</span><span class="pi">:</span> <span class="s">API</span>
     <span class="na">contract</span><span class="pi">:</span>
       <span class="s">$ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">#/product/contract/default'</span>
 </code></pre></div>
-<p>Migration to profiles is recommended when a product needs several reusable contractual contexts, when several interfaces share one contract, or when an explicit Data Access-to-contract relationship is needed. No migration is required solely to keep an existing singleton document valid.</p>
+<p>Additional named access profiles may be added for specific interfaces or audiences.</p>
+<h2 id='external-profile-packages'>External profile packages</h2>
+<p>A root <code>$ref</code> under <code>contract</code> always denotes an external Contract profile package. A root <code>$ref</code> under <code>dataAccess</code> always denotes an external Data Access profile package. In both cases, the resolved package MUST contain <code>default</code>.</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
+  <span class="s">$ref</span><span class="pi">:</span> <span class="s">https://example.org/contracts/contract-profiles.yaml</span>
+
+<span class="na">dataAccess</span><span class="pi">:</span>
+  <span class="s">$ref</span><span class="pi">:</span> <span class="s">https://example.org/access/access-profiles.yaml</span>
+</code></pre></div>
+<p>An individual named profile may also use <code>$ref</code>; it represents one profile, not a package:</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
+  <span class="na">default</span><span class="pi">:</span>
+    <span class="s">$ref</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default.yaml</span>
+
+<span class="na">dataAccess</span><span class="pi">:</span>
+  <span class="na">default</span><span class="pi">:</span>
+    <span class="s">$ref</span><span class="pi">:</span> <span class="s">https://example.org/access/default.yaml</span>
+</code></pre></div><h2 id='migration-checklist'>Migration checklist</h2>
+<ol>
+<li>Replace every singleton <code>product.contract</code> with <code>product.contract.default</code>.</li>
+<li>Add <code>dataAccess.default</code> whenever <code>dataAccess</code> is inline.</li>
+<li>Add <code>outputPortType</code> to every inline Data Access profile.</li>
+<li>Keep Contract-to-Data-Access references as <code>$ref</code> objects; do not copy a complete Contract into an access profile.</li>
+<li>Validate the completed document against the ODPS 4.2 JSON or YAML schema.</li>
+</ol>
 
 <table><thead>
 <tr>
@@ -3963,13 +4006,23 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
 </thead><tbody>
 <tr>
 <td>Singleton <code>product.contract</code></td>
-<td>Still valid for compatibility</td>
-<td>None</td>
+<td>Invalid</td>
+<td>Move the Contract under <code>contract.default</code></td>
 </tr>
 <tr>
 <td>Named contract profiles</td>
-<td>New; inline collections require <code>default</code></td>
-<td>Use for new implementations</td>
+<td>Required when <code>contract</code> is used; inline collections require <code>default</code></td>
+<td>Use <code>default</code> and add named profiles as needed</td>
+</tr>
+<tr>
+<td>Inline <code>dataAccess</code> without <code>default</code></td>
+<td>Invalid</td>
+<td>Add or rename the primary interface to <code>default</code></td>
+</tr>
+<tr>
+<td>Inline Data Access profile without <code>outputPortType</code></td>
+<td>Invalid</td>
+<td>Declare the delivery method, such as <code>file</code>, <code>API</code>, <code>SQL</code>, or <code>AI</code></td>
 </tr>
 <tr>
 <td><code>dataAccess.&lt;profile&gt;.contract</code></td>
@@ -3977,9 +4030,9 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
 <td>Add when an access interface must identify its contract profile</td>
 </tr>
 <tr>
-<td>External contract profile package</td>
-<td>New; referenced collection must contain <code>default</code></td>
-<td>Use when profiles are governed outside the product document</td>
+<td>External Contract or Data Access package</td>
+<td>Referenced package must contain <code>default</code></td>
+<td>Use a root <code>$ref</code> when profiles are governed outside the product document</td>
 </tr>
 </tbody></table>
 <h2 id='earlier-odps-4-0-4-1-migration'>Earlier ODPS 4.0 → 4.1 migration</h2>

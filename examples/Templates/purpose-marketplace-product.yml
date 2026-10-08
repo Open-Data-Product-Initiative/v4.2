@@ -84,10 +84,11 @@ product:
         applicableLaws: "{{string}}"
 
   contract:
-    id: "{{string}}"
-    type: "{{enum: ODCS | DCS}}"
-    contractVersion: "{{string}}"
-    contractURL: "{{string: url}}"
+    default:
+      id: "{{string}}"
+      type: "{{enum: ODCS | DCS}}"
+      contractVersion: "{{string}}"
+      contractURL: "{{string: url}}"
 
   paymentGateways:
     default:
