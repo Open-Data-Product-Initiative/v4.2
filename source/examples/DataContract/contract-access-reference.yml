@@ -13,7 +13,7 @@ product:
       contractVersion: 2.2.2
       contractURL: https://example.org/contracts/restricted
   dataAccess:
-    API:
+    default:
       outputPortType: API
       format: JSON
       accessURL: https://example.org/api

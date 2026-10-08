@@ -77,7 +77,7 @@ Benefits of Referencing:
 * Scalability: You can support multiple audiences or markets with varying quality expectations.
 * Auditability: Clearly link machine-readable checks to business commitments.
 
-**ODPS 4.2 introduces named Data Contract profiles.** An inline profile collection requires `default`, supports additional contractual contexts such as `internal` or `restricted`, and can be maintained as an external package. Each Data Access profile may reference the applicable contract profile, allowing one contract to govern several interfaces without duplication. The ODPS 4.1 singleton Contract syntax remains valid for backward compatibility.
+**ODPS 4.2 introduces named Data Contract profiles.** An inline profile collection requires `default`, supports additional contractual contexts such as `internal` or `restricted`, and can be maintained as an external package. Each Data Access profile may reference the applicable contract profile, allowing one contract to govern several interfaces without duplication.
 
 
 **ODPS 4.1 introduced the productStrategy object**, a significant extension that connects data products to business intent, objectives, and KPIs. That release made ODPS the first open specification where data products declare not just what they are but also why they exist and how success is measured.

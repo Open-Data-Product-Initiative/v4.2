@@ -1,0 +1,22 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
+product:
+  contract:
+    default:
+      id: CONTRACT-001
+      type: ODCS
+  dataAccess:
+    default:
+      outputPortType: API
+      contract:
+        $ref: '#/product/contract/default'
+  details:
+    en:
+      name: Valid Contract target fixture
+      productID: valid-contract-target-fixture
+      valueProposition: Validates the semantic Contract target rule.
+      description: The reference resolves to the default Contract profile.
+      visibility: public
+      status: production
+      type: dataset
+      productVersion: 1.0.0

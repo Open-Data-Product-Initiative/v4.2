@@ -2,10 +2,11 @@ schema: 'https://opendataproducts.org/v4.2/schema/odps.yaml'
 version: 4.2
 product:
   contract:
-    id: 02323M123
-    type: ODCS
-    contractVersion: 2.2.2
-    contractURL: 'https://datamesh-manager.com/urbanltd/dataproducts/9bd530'
+    default:
+      id: 02323M123
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: 'https://datamesh-manager.com/urbanltd/dataproducts/9bd530'
   details:
     en:
       name: UrbanPulse Events
@@ -205,7 +206,7 @@ product:
         en: Latest Dataset and Resources
       outputPortType: file
       format: zip
-      accessURL: url to file as zip
+      accessURL: https://example.org/data/latest-dataset.zip
     dataonly:
       name:
         en: Access to latest dataset
@@ -213,7 +214,7 @@ product:
         en: Latest Dataset
       outputPortType: file
       format: CSV
-      accessURL: url to file as CSV
+      accessURL: https://example.org/data/latest-dataset.csv
     API:
       outputPortType: API
       authenticationMethod: OAuth

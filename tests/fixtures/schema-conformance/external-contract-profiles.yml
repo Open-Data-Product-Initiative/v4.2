@@ -1,0 +1,10 @@
+default:
+  id: CONTRACT-001
+  type: ODCS
+  contractVersion: 2.2.2
+  contractURL: https://example.org/contracts/default
+restricted:
+  id: CONTRACT-002
+  type: ODCS
+  contractVersion: 2.2.2
+  contractURL: https://example.org/contracts/restricted

@@ -218,7 +218,7 @@
                 },
                 "contract": {
                     "type": "object",
-                    "$ref": "#/$defs/ContractConfiguration"
+                    "$ref": "#/$defs/ContractProfiles"
                 },
                 "SLA": {
                     "type": "object",
@@ -238,7 +238,7 @@
                 },
                 "dataAccess": {
                     "type": "object",
-                    "$ref": "#/$defs/DataAccess"
+                    "$ref": "#/$defs/DataAccessConfiguration"
                 },
                 "dataHolder": {
                     "type": "object",
@@ -340,28 +340,6 @@
                 }
             ]
         },
-        "ContractConfiguration": {
-            "description": "A legacy singleton contract or the recommended named contract profile collection.",
-            "oneOf": [
-                {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Contract"
-                        },
-                        {
-                            "not": {
-                                "required": [
-                                    "$ref"
-                                ]
-                            }
-                        }
-                    ]
-                },
-                {
-                    "$ref": "#/$defs/ContractProfiles"
-                }
-            ]
-        },
         "ContractReference": {
             "type": "object",
             "description": "Reference from a Data Access profile to a named data contract profile.",
@@ -417,10 +395,67 @@
         },
         "DataAccess": {
             "type": "object",
-            "description": "Named data access definitions, commonly including default.",
+            "description": "Named data access definitions. The default access profile is required.",
+            "properties": {
+                "default": {
+                    "$ref": "#/$defs/DataAccessProfile"
+                }
+            },
+            "required": [
+                "default"
+            ],
             "additionalProperties": {
-                "$ref": "#/$defs/DataAccessItem"
+                "$ref": "#/$defs/DataAccessProfile"
             }
+        },
+        "DataAccessProfilePackageReference": {
+            "type": "object",
+            "description": "References an external package containing named data access profiles. The referenced package must contain a default profile.",
+            "properties": {
+                "$ref": {
+                    "type": "string",
+                    "format": "uri-reference"
+                }
+            },
+            "required": [
+                "$ref"
+            ],
+            "additionalProperties": false
+        },
+        "DataAccessConfiguration": {
+            "description": "Named data access profiles defined inline or supplied as an external package.",
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/DataAccess"
+                },
+                {
+                    "$ref": "#/$defs/DataAccessProfilePackageReference"
+                }
+            ]
+        },
+        "DataAccessProfileReference": {
+            "type": "object",
+            "description": "References one external data access profile.",
+            "properties": {
+                "$ref": {
+                    "type": "string",
+                    "format": "uri-reference"
+                }
+            },
+            "required": [
+                "$ref"
+            ],
+            "additionalProperties": false
+        },
+        "DataAccessProfile": {
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/DataAccessItem"
+                },
+                {
+                    "$ref": "#/$defs/DataAccessProfileReference"
+                }
+            ]
         },
         "PaymentGateway": {
             "type": "object",
@@ -1004,6 +1039,9 @@
         },
         "DataAccessItem": {
             "type": "object",
+            "required": [
+                "outputPortType"
+            ],
             "properties": {
                 "name": {
                     "type": "object",

@@ -71,10 +71,11 @@ product:
             unit: "{{enum: percent | milliseconds | seconds | minutes | days | weeks | months | years | never | date | null}}"
 
   contract:
-    id: "{{string}}"
-    type: "{{enum: ODCS | DCS}}"
-    contractVersion: "{{string}}"
-    contractURL: "{{string: url}}"
+    default:
+      id: "{{string}}"
+      type: "{{enum: ODCS | DCS}}"
+      contractVersion: "{{string}}"
+      contractURL: "{{string: url}}"
 
   license:
     en:

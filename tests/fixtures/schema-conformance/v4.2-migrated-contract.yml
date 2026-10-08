@@ -1,0 +1,19 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
+product:
+  contract:
+    default:
+      id: CONTRACT-001
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: https://example.org/contracts/default
+  details:
+    en:
+      name: Migrated Contract fixture
+      productID: migrated-contract-fixture
+      valueProposition: Demonstrates the required Contract migration.
+      description: A v4.1 singleton Contract fixture.
+      visibility: public
+      status: production
+      type: dataset
+      productVersion: 1.0.0

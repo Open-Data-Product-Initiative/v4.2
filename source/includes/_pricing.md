@@ -157,7 +157,7 @@ pricingPlans:
   executable:
     - name: Premium subscription 1 year
       type: Stripe
-      reference: urls to Stripe docs
+      reference: https://docs.stripe.com/api
       create:
         spec:
           - cmd: stripe products create  \

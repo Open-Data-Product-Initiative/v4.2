@@ -1,0 +1,8 @@
+default:
+  outputPortType: API
+  format: JSON
+  accessURL: https://example.org/api
+agent:
+  outputPortType: AI
+  specification: MCP
+  format: MCP

@@ -1,0 +1,17 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
+product:
+  contract:
+    $ref: external-contract-profiles.yml
+  dataAccess:
+    $ref: external-data-access-profiles.yml
+  details:
+    en:
+      name: External package fixture
+      productID: external-package-fixture
+      valueProposition: Validates locally resolved profile packages.
+      description: Contract and Data Access profiles are loaded from external packages.
+      visibility: public
+      status: production
+      type: dataset
+      productVersion: 1.0.0

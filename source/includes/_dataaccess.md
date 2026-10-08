@@ -2,6 +2,8 @@
 
 The `dataAccess` object defines how users—or machines—can technically access the data product. It allows publishers to describe **multiple, named access methods** tailored to different consumer needs: from simple file downloads and APIs to AI agent integration via protocols like **MCP**.
 
+When `dataAccess` is defined inline, it MUST include an access profile named `default`. A root `$ref` may instead load an external profile package; that package MUST include `default`.
+
 Each entry under `dataAccess` (such as `default`, `API`, or `Agent`) represents a distinct access interface with its own metadata, authentication requirements, and documentation references. This structure makes it possible to:
 
 - Offer **flexible access modes** for various user personas (analysts, developers, AI agents, etc.)
@@ -34,7 +36,7 @@ dataAccess:
       en: Latest Dataset and Resources
     outputPortType: file
     format: zip
-    accessURL: url to file as zip
+    accessURL: https://example.org/data/latest-dataset.zip
   dataonly:
     name:
       en: Access to latest dataset
@@ -42,7 +44,7 @@ dataAccess:
       en: Latest Dataset
     outputPortType: file
     format: CSV
-    accessURL: url to file as CSV
+    accessURL: https://example.org/data/latest-dataset.csv
   API:
     name:
       en: Access to API
