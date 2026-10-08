@@ -2,11 +2,11 @@
 <!doctype html>
 <html>
   <head>
-    <link rel="icon" type="image/png" sizes="512x512" href="https://raw.githubusercontent.com/Open-Data-Product-Initiative/v4.1/refs/heads/main/source/images/favicon.png?v2">
-    <link rel="apple-touch-icon" sizes="512x512" href="https://raw.githubusercontent.com/Open-Data-Product-Initiative/v4.1/refs/heads/main/source/images/favicon.png?v2">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://raw.githubusercontent.com/Open-Data-Product-Initiative/v4.2/refs/heads/main/source/images/favicon.png?v2">
+    <link rel="apple-touch-icon" sizes="512x512" href="https://raw.githubusercontent.com/Open-Data-Product-Initiative/v4.2/refs/heads/main/source/images/favicon.png?v2">
     <meta charset="utf-8">
-    <meta property="og:title" content="Open Data Product Specification - Version 4.1" />
-    <meta property="og:url" content="https://opendataproducts.org/v4.1" />
+    <meta property="og:title" content="Open Data Product Specification - Version 4.2" />
+    <meta property="og:url" content="https://opendataproducts.org/v4.2" />
     <meta property=”og:type” content=”website” />
     <meta property="og:image" content="https://opendataproducts.org/images/social.png" />
     <meta property="og:description" 
@@ -18,7 +18,7 @@
             content="The Open Data Product Specification (Linux Foundation project) is a vendor-neutral, open-source machine-readable data product metadata model. It defines the objects and attributes as well as the structure of digital data products."
         >
 
-    <title>Open (source) Data Product Specification 4.1 Version | Linux Foundation</title>
+    <title>Open (source) Data Product Specification 4.2 Version | Linux Foundation</title>
 
 
     <style media="screen">
@@ -337,7 +337,7 @@
             <a href="#open-data-product-specification-the-linux-foundation" class="toc-h1 toc-link" data-title="OPEN DATA PRODUCT SPECIFICATION - The Linux Foundation">OPEN DATA PRODUCT SPECIFICATION - The Linux Foundation</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#version-4-1" class="toc-h2 toc-link" data-title="Version 4.1">Version 4.1</a>
+                    <a href="#version-4-2" class="toc-h2 toc-link" data-title="Version 4.2">Version 4.2</a>
                   </li>
                   <li>
                     <a href="#introduction" class="toc-h2 toc-link" data-title="Introduction">Introduction</a>
@@ -383,6 +383,9 @@
           <li>
             <a href="#data-contract" class="toc-h1 toc-link" data-title="Data Contract">Data Contract</a>
               <ul class="toc-list-h2">
+                  <li>
+                    <a href="#legacy-singleton-compatibility" class="toc-h2 toc-link" data-title="Legacy singleton compatibility">Legacy singleton compatibility</a>
+                  </li>
                   <li>
                     <a href="#optional-attributes-and-elements" class="toc-h2 toc-link" data-title="Optional attributes and elements">Optional attributes and elements</a>
                   </li>
@@ -494,22 +497,13 @@
               </ul>
           </li>
           <li>
-            <a href="#odps-4-0-4-1-migration-guide" class="toc-h1 toc-link" data-title="ODPS 4.0 → 4.1 Migration Guide">ODPS 4.0 → 4.1 Migration Guide</a>
+            <a href="#odps-4-1-4-2-migration-guide" class="toc-h1 toc-link" data-title="ODPS 4.1 → 4.2 Migration Guide">ODPS 4.1 → 4.2 Migration Guide</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#1-new-productstrategy-object" class="toc-h2 toc-link" data-title="1. New productStrategy object">1. New <code>productStrategy</code> object</a>
+                    <a href="#migrating-a-singleton-data-contract" class="toc-h2 toc-link" data-title="Migrating a singleton Data Contract">Migrating a singleton Data Contract</a>
                   </li>
                   <li>
-                    <a href="#backward-compatibility" class="toc-h2 toc-link" data-title="Backward Compatibility">Backward Compatibility</a>
-                  </li>
-                  <li>
-                    <a href="#how-to-extend-an-existing-4-0-file" class="toc-h2 toc-link" data-title="How to Extend an Existing 4.0 File">How to Extend an Existing 4.0 File</a>
-                  </li>
-                  <li>
-                    <a href="#summary" class="toc-h2 toc-link" data-title="Summary">Summary</a>
-                  </li>
-                  <li>
-                    <a href="#next-steps" class="toc-h2 toc-link" data-title="Next Steps">Next Steps</a>
+                    <a href="#earlier-odps-4-0-4-1-migration" class="toc-h2 toc-link" data-title="Earlier ODPS 4.0 → 4.1 migration">Earlier ODPS 4.0 → 4.1 migration</a>
                   </li>
               </ul>
           </li>
@@ -534,7 +528,7 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='open-data-product-specification-the-linux-foundation'>OPEN DATA PRODUCT SPECIFICATION - The Linux Foundation</h1><h2 id='version-4-1'>Version 4.1</h2>
+        <h1 id='open-data-product-specification-the-linux-foundation'>OPEN DATA PRODUCT SPECIFICATION - The Linux Foundation</h1><h2 id='version-4-2'>Version 4.2</h2>
 <p>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in BCP 14 (<a href="https://datatracker.ietf.org/doc/html/rfc2119">RFC 2119</a> and <a href="https://datatracker.ietf.org/doc/html/rfc8174">RFC 8174</a>) when, and only when, they appear in all capitals, as shown here.</p>
 
 <p>The specification is shared under <a href='https://www.apache.org/licenses/LICENSE-2.0'>Apache 2.0</a> license. 
@@ -549,23 +543,23 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 </thead><tbody>
 <tr>
 <td>Version source</td>
-<td><a href="https://github.com/Open-Data-Product-Initiative/v4.1">Open Data Product Specification 4.1 on GitHub</a></td>
-<td>Official source repository for the ODPS 4.1 specification</td>
+<td><a href="https://github.com/Open-Data-Product-Initiative/v4.2">Open Data Product Specification 4.2 on GitHub</a></td>
+<td>Official source repository for the ODPS 4.2 specification</td>
 </tr>
 <tr>
 <td>ODPS YAML schema</td>
-<td><a href="https://opendataproducts.org/v4.1/schema/odps.yaml">YAML Schema</a></td>
+<td><a href="https://opendataproducts.org/v4.2/schema/odps.yaml">YAML Schema</a></td>
 <td>Machine-readable schema definition in YAML format</td>
 </tr>
 <tr>
 <td>ODPS JSON schema</td>
-<td><a href="https://opendataproducts.org/v4.1/schema/odps.json">JSON Schema</a></td>
+<td><a href="https://opendataproducts.org/v4.2/schema/odps.json">JSON Schema</a></td>
 <td>Machine-readable schema definition in JSON format</td>
 </tr>
 <tr>
 <td>Migration guide</td>
-<td><a href="#odps-4-0-4-1-migration-guide">Migration guide available</a></td>
-<td>Notes and guidance for upgrading from ODPS 4.0 to 4.1</td>
+<td><a href="#odps-4-1-4-2-migration-guide">Migration guide available</a></td>
+<td>Notes and guidance for upgrading from ODPS 4.1 to 4.2</td>
 </tr>
 <tr>
 <td>Knowledge Base</td>
@@ -574,14 +568,14 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 </tr>
 <tr>
 <td>Contribute</td>
-<td><a href="https://github.com/Open-Data-Product-Initiative/v4.1/issues">Raise an issue in GitHub</a></td>
+<td><a href="https://github.com/Open-Data-Product-Initiative/v4.2/issues">Raise an issue in GitHub</a></td>
 <td>Submit issues or suggestions to the specification maintainers</td>
 </tr>
 </tbody></table>
 <h2 id='introduction'>Introduction</h2>
 <p>The Open Data Product Specification is a vendor-neutral, open-source machine-readable data product metadata model. It defines the objects and attributes as well as the structure of digital data products. The work is based on existing standards (schema.org), best practices and emerging concepts like Data Mesh. The reasoning is that we reuse and proudly copy instead of reinventing the wheel. More detailed information of the origin can be found from the <a href="http://www.opendataproducts.org">Open Data Product Specification homepage</a>. </p>
 
-<p><strong>The ODPS 4.1 specification supports referencing mechanisms</strong> that improve modularity, reduce duplication, and ease governance. Users can reference internal components, such as SLA, dataQuality, dataAccess, and paymentGateways, from other parts of the product definition using <a href="https://json-spec.readthedocs.io/reference.html">JSON Reference syntax</a> ($ref). In addition, any of these components can be defined and maintained in external YAML files and included via URL-based references <a href="https://opendataproducts.org/howto/">Examples in the Knowledge Base</a>. This makes it possible: </p>
+<p><strong>The ODPS 4.2 specification supports referencing mechanisms</strong> that improve modularity, reduce duplication, and ease governance. Users can reference internal components, such as Data Contract profiles, SLA, dataQuality, dataAccess, and paymentGateways, from other parts of the product definition using <a href="https://json-spec.readthedocs.io/reference.html">JSON Reference syntax</a> ($ref). In addition, these components can be defined and maintained in external YAML files and included via URL-based references <a href="https://opendataproducts.org/howto/">Examples in the Knowledge Base</a>. This makes it possible:</p>
 
 <ul>
 <li>to reuse standardized SLA profiles, DQ rules, or access definitions across multiple data products, </li>
@@ -598,9 +592,11 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <li>Auditability: Clearly link machine-readable checks to business commitments.</li>
 </ul>
 
-<p><strong>ODPS 4.1 introduces the productStrategy object</strong>, a significant extension that connects data products to business intent, objectives, and KPIs. This release makes ODPS the first open specification where data products declare not just what they are but also why they exist and how success is measured.</p>
+<p><strong>ODPS 4.2 introduces named Data Contract profiles.</strong> An inline profile collection requires <code>default</code>, supports additional contractual contexts such as <code>internal</code> or <code>restricted</code>, and can be maintained as an external package. Each Data Access profile may reference the applicable contract profile, allowing one contract to govern several interfaces without duplication. The ODPS 4.1 singleton Contract syntax remains valid for backward compatibility.</p>
 
-<p>ODPS 4.1 has also been extended with <strong>two optional attributes that support portfolio management and governance transparency for data products.</strong></p>
+<p><strong>ODPS 4.1 introduced the productStrategy object</strong>, a significant extension that connects data products to business intent, objectives, and KPIs. That release made ODPS the first open specification where data products declare not just what they are but also why they exist and how success is measured.</p>
+
+<p>ODPS 4.1 also added <strong>two optional attributes that support portfolio management and governance transparency for data products.</strong></p>
 
 <p><strong>The portfolioPriority attribute</strong> allows organizations to express the relative importance of a data product within their overall data product portfolio. While lifecycle states describe maturity, portfolioPriority communicates strategic importance. This helps organizations prioritize development, allocate resources, and identify which products require stronger operational attention. Typical values include Critical, High, Medium, and Low.</p>
 
@@ -644,7 +640,7 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 
 <p><img src="images/ODPS-design-971d4b0b.png" alt="odps-model" /></p>
 
-<p>If you see something missing, described inaccurately or plain wrong, or you want to comment the specification, <a href="https://github.com/Open-Data-Product-Initiative/v4.1/issues">raise an issue in Github</a></p>
+<p>If you see something missing, described inaccurately or plain wrong, or you want to comment the specification, <a href="https://github.com/Open-Data-Product-Initiative/v4.2/issues">raise an issue in Github</a></p>
 <h2 id='documentation-structure'>Documentation structure</h2>
 <p><strong>LEFT COLUMN: Navigation</strong></p>
 
@@ -680,8 +676,8 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <blockquote>
 <p>Example of document level usage and structure:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.1/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.1</span>
+<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
 <span class="na">product</span><span class="pi">:</span>
 </code></pre></div>
 <table><thead>
@@ -701,7 +697,7 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <tr>
 <td><strong>version</strong></td>
 <td>string</td>
-<td>This is the version of ODPS, for example dev or 4.1</td>
+<td>This is the version of ODPS, for example dev or 4.2</td>
 <td><strong>REQUIRED</strong> Defines the ODPS version.</td>
 </tr>
 <tr>
@@ -717,16 +713,19 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <blockquote>
 <p>Example of details object usage:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.0/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.1</span>
+<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">details</span><span class="pi">:</span> 
     <span class="na">en</span><span class="pi">:</span>
       <span class="na">name</span><span class="pi">:</span> <span class="s">Pets of the year</span>
       <span class="na">productID</span><span class="pi">:</span> <span class="s">123456are</span>
+      <span class="na">valueProposition</span><span class="pi">:</span> <span class="s">Help pet stores select products for local customer needs.</span>
+      <span class="na">description</span><span class="pi">:</span> <span class="s">A focused pet characteristics dataset.</span>
       <span class="na">visibility</span><span class="pi">:</span> <span class="s">private</span>
       <span class="na">status</span><span class="pi">:</span> <span class="s">draft</span>
       <span class="na">type</span><span class="pi">:</span> <span class="s">dataset</span>
+      <span class="na">productVersion</span><span class="pi">:</span> <span class="s">1.0.0</span>
 </code></pre></div>
 <table><thead>
 <tr>
@@ -783,8 +782,8 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <blockquote>
 <p>Example of details object usage:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.1/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.1</span>
+<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">details</span><span class="pi">:</span> 
     <span class="na">en</span><span class="pi">:</span>
@@ -996,9 +995,9 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <blockquote>
 <p>Example of catalog object usage:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.1/schema/odps.yaml</span>
-<span class="c1"># JSON schema: https://opendataproducts.org/v4.1/schema/odps.json</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.1</span>
+<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
+<span class="c1"># JSON schema: https://opendataproducts.org/v4.2/schema/odps.json</span>
+<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">productStrategy</span><span class="pi">:</span>
     <span class="na">status</span><span class="pi">:</span> <span class="s">Planned</span>
@@ -1172,36 +1171,76 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <li><strong>Traceability:</strong> use shared KPI <code>id</code>s to enable cross‑product roll‑ups against the same business KPI.</li>
 </ul>
 <h1 id='data-contract'>Data Contract</h1>
-<p>The <code>contract</code> object in the ODPS schema defines the structure for linking a data product to a formal data contract. It includes an <code>id</code> as a unique identifier, a <code>type</code> field that specifies the contract standard (either ODCS or DCS), a <code>contractVersion</code> indicating the version of the standard, and a <code>contractURL</code> that points to an external contract document in a contract management service. Optionally, an inline YAML spec element can be used instead of a URL to embed the contract directly in the product file. These specifications allow data producers to clearly declare governance, usage rights, and technical expectations, supporting interoperability across platforms using standards such as the Open Data Contract Standard (ODCS) or the Data Contract Specification (DCS). More details in the <a href="https://opendataproducts.org/howto/">Knowledge Base</a>.</p>
+<p>The OPTIONAL <code>product.contract</code> object declares the formal data contracts that govern a data product. ODPS 4.2 supports reusable, named Data Contract profiles. New implementations SHOULD use the profile form so that Data Access interfaces can state which contractual context applies.</p>
 
-<p>Contract can be defined in 3 ways:</p>
+<p>When contract profiles are defined inline, a profile named <code>default</code> is REQUIRED. One or more additional profiles may be added with names chosen by the publisher. Each profile uses the existing Contract object; ODPS does not define a second contract model.</p>
 
-<ul>
-<li>Use ODPS given attributes to define basic information of the data contract and add URL to details found in contract management system</li>
-<li>Same as above but add contract details as YAML on <code>spec</code> element. </li>
-<li>Use <code>$ref</code> to define contract object content in a separate file.<br></li>
-</ul>
-<h2 id='optional-attributes-and-elements'>Optional attributes and elements</h2>
 <blockquote>
-<p>Example of contract object usage:</p>
+<p>Example of named Data Contract profiles:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.0/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.1</span>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">contract</span><span class="pi">:</span>
-    <span class="c1"># Optionally se URI of external file, contains all contract details</span>
-    <span class="s">$ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://example.org/contracts/default.yaml'</span>
-    <span class="c1"># Or then define with attributes</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">02323M123</span>  
-    <span class="na">type</span><span class="pi">:</span>  <span class="s">ODCS</span> 
-    <span class="na">contractVersion</span><span class="pi">:</span>  <span class="s">2.2.2</span>
-    <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://demo.datamesh-manager.com/demo834016807886/dataproducts/9bd53b1b-b51e-41a8-a757-4d33b4cde460</span>
-    <span class="c1"># Or use inline style and add contract under spec element</span>
-    <span class="na">spec</span><span class="pi">:</span>
-        <span class="s">....</span>
-
-
+    <span class="na">default</span><span class="pi">:</span>
+      <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-001</span>
+      <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
+      <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
+      <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default</span>
+    <span class="na">internal</span><span class="pi">:</span>
+      <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-002</span>
+      <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
+      <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
+      <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://example.org/contracts/internal</span>
 </code></pre></div>
+<p>An individual Contract profile can be defined in three ways:</p>
+
+<ul>
+<li>use <code>$ref</code> to load the individual contract definition from a local or external file;</li>
+<li>provide <code>id</code>, <code>type</code>, <code>contractVersion</code>, and <code>contractURL</code> metadata that links to a contract management system; or</li>
+<li>provide the metadata and embed contract content under <code>spec</code>.</li>
+</ul>
+
+<blockquote>
+<p>Example of external and inline individual profiles:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
+  <span class="na">default</span><span class="pi">:</span>
+    <span class="s">$ref</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default.yaml</span>
+  <span class="na">internal</span><span class="pi">:</span>
+    <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-002</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
+    <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v2.2.2</span>
+      <span class="na">kind</span><span class="pi">:</span> <span class="s">DataContract</span>
+</code></pre></div>
+<p>The complete profile collection may instead be maintained as an external package. The referenced file represents the profile collection itself and MUST contain <code>default</code>.</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
+  <span class="s">$ref</span><span class="pi">:</span> <span class="s">https://example.org/contracts/contract-profiles.yaml</span>
+</code></pre></div>
+<p>These two reference locations have different meanings:</p>
+
+<ul>
+<li><code>product.contract.$ref</code> references an external package containing multiple named profiles.</li>
+<li><code>product.contract.&lt;profile&gt;.$ref</code> references the external definition of one specific profile.</li>
+</ul>
+
+<p>The same contract profile MAY be referenced by several Data Access profiles. This enables define-once, reference-many governance without copying a complete Contract object into each access definition.</p>
+
+<p>Complete examples are available for <a href="examples/DataContract/contract-profiles.yml">named profiles</a>, <a href="examples/DataContract/contract-access-reference.yml">Data Access bindings</a>, <a href="examples/DataContract/contract-external-profile.yml">an external individual profile</a>, <a href="examples/DataContract/datacontract-inline.yml">inline contract content</a>, and <a href="examples/DataContract/contract-profiles-package.yml">an external profile package</a>.</p>
+<h3 id='legacy-singleton-compatibility'>Legacy singleton compatibility</h3>
+<p>The ODPS 4.1 singleton form remains valid in ODPS 4.2 for backward compatibility:</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-001</span>
+  <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
+  <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
+  <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default</span>
+</code></pre></div>
+<p>The singleton metadata, inline <code>spec</code>, and external <code>$ref</code> forms remain accepted. A legacy singleton <code>$ref</code> and a v4.2 external profile-package <code>$ref</code> have the same wrapper shape; tools that resolve external content determine whether the target is one Contract or a profile collection. For new documents, a <code>$ref</code> directly under <code>product.contract</code> SHOULD target a profile package.</p>
+
+<p>The singleton form is deprecated for new implementations because it cannot express several reusable contractual contexts or explicit Data Access-to-contract relationships. Existing documents do not need to migrate unless they need those capabilities.</p>
+<h2 id='optional-attributes-and-elements'>Optional attributes and elements</h2>
 <table><thead>
 <tr>
 <th><div style="width:150px">Element name</div></th>
@@ -1212,45 +1251,57 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 </thead><tbody>
 <tr>
 <td><strong>contract</strong></td>
-<td>element</td>
+<td>object</td>
+<td>legacy Contract, named profiles, or package <code>$ref</code></td>
+<td>OPTIONAL collection of Data Contract profiles. Inline profile collections MUST contain <code>default</code>. The legacy singleton Contract remains valid for compatibility.</td>
+</tr>
+<tr>
+<td><strong>default</strong></td>
+<td>Contract</td>
 <td>-</td>
-<td>Binds together data contract details. You can use both URL and inline (YAML) for data contract content.</td>
+<td>REQUIRED only when the named profile form is used inline. It is the primary contractual context.</td>
+</tr>
+<tr>
+<td><strong>&lt;profile&gt;</strong></td>
+<td>Contract</td>
+<td>publisher-defined name</td>
+<td>An additional reusable contractual context, such as <code>internal</code> or <code>restricted</code>.</td>
 </tr>
 <tr>
 <td><strong>id</strong></td>
 <td>string</td>
 <td>-</td>
-<td>UUID of the data contract</td>
+<td>Identifier of an individual data contract.</td>
 </tr>
 <tr>
 <td><strong>type</strong></td>
 <td>string</td>
-<td>one of: ODCS, DCS</td>
-<td>Defines the standard used in data contract. Currently supported options: <a href="https://github.com/bitol-io/open-data-contract-standard">ODCS</a> and <a href="https://datacontract.com/">DCS</a>.</td>
+<td>ODCS, DCS</td>
+<td>Standard used by the individual contract. Supported options are <a href="https://github.com/bitol-io/open-data-contract-standard">ODCS</a> and <a href="https://datacontract.com/">DCS</a>.</td>
 </tr>
 <tr>
 <td><strong>contractVersion</strong></td>
 <td>string</td>
 <td>-</td>
-<td>Version of the standard used to define the Data Contract. Type attribute defines the standard/specification. NOTE! This is not the possible iterated version of the data contract itself.</td>
+<td>Version of the standard used to define the Data Contract, not the revision of the contract instance itself.</td>
 </tr>
 <tr>
 <td><strong>contractURL</strong></td>
 <td>URL</td>
-<td>Valid URL. See more from <a href="https://datatracker.ietf.org/doc/html/rfc3986">RFC 3986</a>.</td>
-<td>URL pointing to data contract in data contract management service or alike. Optionally you can use <em>spec</em> to add data contract details as YAML inline element.</td>
+<td>Valid URL; see <a href="https://datatracker.ietf.org/doc/html/rfc3986">RFC 3986</a></td>
+<td>Location of the individual contract in a contract management service or similar system.</td>
 </tr>
 <tr>
 <td><strong>spec</strong></td>
-<td>string</td>
-<td>YAML</td>
-<td>Inline YAML element to add data contract details instead of using URL.</td>
+<td>object</td>
+<td>YAML object</td>
+<td>Inline content for an individual contract profile.</td>
 </tr>
 <tr>
 <td><strong>$ref</strong></td>
-<td>URI</td>
-<td>Valid URI</td>
-<td>Points to the contract content, local file or online. You can use this or then the other above described approaches to define elements of the contract.</td>
+<td>URI reference</td>
+<td>local or external</td>
+<td>At <code>product.contract</code>, references a complete profile package. At a named profile, references one individual contract definition.</td>
 </tr>
 </tbody></table>
 <h1 id='data-sla'>Data SLA</h1>
@@ -2580,12 +2631,15 @@ pricingPlans:
 <li>Support <strong>multilingual UI presentation</strong> through localized <code>name</code> and <code>description</code> fields</li>
 <li>Clearly declare <strong>security expectations</strong> using <code>authenticationMethod</code></li>
 <li>Link to both <strong>machine-readable specs</strong> (<code>specsURL</code>) and <strong>human-readable guides</strong> (<code>documentationURL</code>)</li>
+<li>Bind an interface to the governing named Data Contract profile through <code>contract</code></li>
 <li>Promote <strong>reusability</strong> by referencing these interfaces throughout the ODPS YAML using <code>$ref</code></li>
 </ul>
 
 <p>Including an AI agent-specific access interface (<code>outputPortType: AI</code>) supports MCP-based agent interactions, aligning your product with <strong>AI-native data delivery patterns</strong>.</p>
 <h4 id='referencing-examples'>Referencing Examples</h4>
-<p>For example in your <code>access</code> section in Pricing, you can reuse any defined method from <code>dataAccess</code> like this: <em>$ref: &#39;#/Product/dataAccess/default&#39;</em></p>
+<p>For example, the <code>access</code> section in Pricing can reuse a defined method from <code>dataAccess</code> with <code>$ref: &#39;#/product/dataAccess/default&#39;</code>.</p>
+
+<p>A Data Access profile MAY contain a <code>contract</code> reference to the named Data Contract profile governing that interface. The value MUST be a reference object; do not copy the complete Contract object under <code>dataAccess</code>. Several access profiles may reference the same contract profile.</p>
 <h2 id='optional-attributes-and-elements'>Optional attributes and elements</h2>
 <blockquote>
 <p>Example of Data Access object usage:</p>
@@ -2623,6 +2677,8 @@ pricingPlans:
       <span class="s">https://data.cms.gov/provr-enrollment/api-docs</span>
     <span class="na">documentationURL</span><span class="pi">:</span> <span class="pi">&gt;-</span> 
       <span class="s">https://data.cms.gov/provr-enrollment/docs</span>
+    <span class="na">contract</span><span class="pi">:</span>
+      <span class="s">$ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">#/product/contract/default'</span>
   <span class="na">agent</span><span class="pi">:</span> 
     <span class="na">name</span><span class="pi">:</span>
       <span class="na">en</span><span class="pi">:</span> <span class="s">AI Agent access to the data product</span>
@@ -2679,7 +2735,7 @@ pricingPlans:
 <td><strong>default</strong></td>
 <td>object</td>
 <td>-</td>
-<td>This object defines the default access interface and must always be present if dataAccess object is used. The name <code>default</code> is fixed and used as the fallback or primary access method. <br/><br/> In the example, you will see additional user-defined access methods (<code>dataonly</code>, <code>API</code>, <code>Agent</code>) demonstrating how various access interfaces can be added beyond the required <code>default</code>. <br/><br/> <strong>Example reference usage:</strong> <br/> <code>access: $ref: &#39;#/dataAccess/default&#39;</code></td>
+<td>This object defines the default access interface and must always be present if dataAccess object is used. The name <code>default</code> is fixed and used as the fallback or primary access method. <br/><br/> In the example, you will see additional user-defined access methods (<code>dataonly</code>, <code>API</code>, <code>Agent</code>) demonstrating how various access interfaces can be added beyond the required <code>default</code>. <br/><br/> <strong>Example reference usage:</strong> <br/> <code>access: $ref: &#39;#/product/dataAccess/default&#39;</code></td>
 </tr>
 <tr>
 <td><strong>name</strong></td>
@@ -2734,6 +2790,12 @@ pricingPlans:
 <td>URL</td>
 <td>Valid URL</td>
 <td>A human-readable documentation or guide for access setup, authentication steps, or onboarding.</td>
+</tr>
+<tr>
+<td><strong>contract</strong></td>
+<td>reference object</td>
+<td><code>$ref</code> is required</td>
+<td>OPTIONAL reference to the named Data Contract profile that governs this access interface, for example <code>$ref: &#39;#/product/contract/default&#39;</code>. A complete Contract object is not allowed here.</td>
 </tr>
 <tr>
 <td><strong>hashType</strong></td>
@@ -2954,11 +3016,11 @@ Named gateway definitions (e.g., <code>default</code>, <code>Agent</code>) can b
 <blockquote>
 <p>referencing examples:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight plaintext"><code>  $ref: '#/Product/paymentGateways/default'
+<div class="highlight"><pre class="highlight plaintext"><code>  $ref: '#/product/paymentGateways/default'
 
   ...
 
-  $ref: '#/Product/dataQuality/agent'
+  $ref: '#/product/dataQuality/agent'
 </code></pre></div>
 <p><strong>The Role of <code>default</code>:</strong>
 Whenever the <code>paymentGateways</code> object is used, a gateway named <code>default</code> is <strong>expected and required</strong>. It serves as the <strong>primary or fallback payment method</strong> and enables compatibility even in simpler configurations that only need one payment integration.</p>
@@ -3116,8 +3178,8 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
 </blockquote>
 <div class="highlight"><pre class="highlight yaml"><code>
 <span class="nn">---</span>
-<span class="na">schema</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://opendataproducts.org/v4.1/schema/odps.yaml'</span>
-<span class="na">version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">4.1'</span>
+<span class="na">schema</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml'</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">4.2'</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">productStrategy</span><span class="pi">:</span>
     <span class="na">objectives</span><span class="pi">:</span>
@@ -3156,10 +3218,16 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
         <span class="na">direction</span><span class="pi">:</span> <span class="s">at_most</span>
         <span class="na">calculation</span><span class="pi">:</span> <span class="s">p50(update_ts - event_ts)</span>
   <span class="na">contract</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">02323M123</span>
-    <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
-    <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
-    <span class="na">contractURL</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://datamesh-manager.com/urbanltd/dataproducts/9bd530'</span>
+    <span class="na">default</span><span class="pi">:</span>
+      <span class="na">id</span><span class="pi">:</span> <span class="s">02323M123</span>
+      <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
+      <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
+      <span class="na">contractURL</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://datamesh-manager.com/urbanltd/dataproducts/9bd530'</span>
+    <span class="na">internal</span><span class="pi">:</span>
+      <span class="na">id</span><span class="pi">:</span> <span class="s">02323M124</span>
+      <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
+      <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
+      <span class="na">contractURL</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://datamesh-manager.com/urbanltd/dataproducts/9bd531'</span>
   <span class="na">details</span><span class="pi">:</span>
     <span class="na">en</span><span class="pi">:</span>
       <span class="na">name</span><span class="pi">:</span> <span class="s">UrbanPulse Events</span>
@@ -3189,7 +3257,7 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
         <span class="pi">-</span> <span class="s">tourism</span>
         <span class="pi">-</span> <span class="s">smartcity</span>
       <span class="na">standards</span><span class="pi">:</span>
-        <span class="pi">-</span> <span class="s">ODPS </span><span class="m">4.0</span>
+        <span class="pi">-</span> <span class="s">ODPS </span><span class="m">4.2</span>
       <span class="na">tags</span><span class="pi">:</span>
         <span class="pi">-</span> <span class="s">smartcity</span>
         <span class="pi">-</span> <span class="s">events</span>
@@ -3375,6 +3443,8 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
       <span class="na">accessURL</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://data.cms.gov/data-api/v1/dataset/2/data'</span>
       <span class="na">specsURL</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://data.cms.gov/provr-enrollment/api-docs'</span>
       <span class="na">documentationURL</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://data.cms.gov/provr-enrollment/docs'</span>
+      <span class="na">contract</span><span class="pi">:</span>
+        <span class="s">$ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">#/product/contract/default'</span>
     <span class="na">Agent</span><span class="pi">:</span>
       <span class="na">outputPortType</span><span class="pi">:</span> <span class="s">AI</span>
       <span class="na">description</span><span class="pi">:</span>
@@ -3384,6 +3454,8 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
       <span class="na">format</span><span class="pi">:</span> <span class="s">MCP</span>
       <span class="na">specsURL</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://urbanpulse.ai/llms.txt'</span>
       <span class="na">documentationURL</span><span class="pi">:</span> <span class="s1">'</span><span class="s">https://urbanpulse.ai/llms-full.txt'</span>
+      <span class="na">contract</span><span class="pi">:</span>
+        <span class="s">$ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">#/product/contract/default'</span>
   <span class="na">paymentGateways</span><span class="pi">:</span>
     <span class="na">default</span><span class="pi">:</span>
       <span class="na">description</span><span class="pi">:</span>
@@ -3504,8 +3576,8 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
 <p>Example of mandatory-only elements and attributes Open Data Product specification instance:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight yaml"><code>
-<span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.1/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.1</span>
+<span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">details</span><span class="pi">:</span>
     <span class="na">en</span><span class="pi">:</span>
@@ -3847,100 +3919,80 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
 </tbody></table>
 
 <p>If you see something missing, described inaccurately or plain wrong, or you want to comment the specification, <a href="https://github.com/Open-Data-Product-Initiative/dev/issues">raise an issue in Github</a></p>
-<h1 id='odps-4-0-4-1-migration-guide'>ODPS 4.0 → 4.1 Migration Guide</h1>
-<p>Version 4.1 is a <strong>minor, fully backward-compatible update</strong> to the Open Data Product Specification.<br>
-Existing 4.0 YAML files remain valid without modification.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">product</span><span class="pi">:</span>
-  <span class="na">productStrategy</span><span class="pi">:</span>
-    <span class="na">objectives</span><span class="pi">:</span>
-    <span class="na">strategicAlignment</span><span class="pi">:</span>
-    <span class="na">contributesToKPI</span><span class="pi">:</span>
-    <span class="na">productKPIs</span><span class="pi">:</span>
-    <span class="na">relatedKPIs</span><span class="pi">:</span>
-</code></pre></div><h3 id='1-new-productstrategy-object'>1. New <code>productStrategy</code> object</h3>
-<p>A new top-level object under <code>product</code> introduces the ability to connect data products to business outcomes.</p>
+<h1 id='odps-4-1-4-2-migration-guide'>ODPS 4.1 → 4.2 Migration Guide</h1>
+<p>ODPS 4.2 is a minor, backward-compatible update. Existing ODPS 4.1 documents that use a singleton <code>product.contract</code> remain valid without modification.</p>
+<h2 id='migrating-a-singleton-data-contract'>Migrating a singleton Data Contract</h2>
+<p>The ODPS 4.1 singleton form remains supported:</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-001</span>
+  <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
+  <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
+  <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default</span>
+</code></pre></div>
+<p>For new ODPS 4.2 implementations, place the Contract object under the required <code>default</code> profile:</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">contract</span><span class="pi">:</span>
+  <span class="na">default</span><span class="pi">:</span>
+    <span class="na">id</span><span class="pi">:</span> <span class="s">CONTRACT-001</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">ODCS</span>
+    <span class="na">contractVersion</span><span class="pi">:</span> <span class="s">2.2.2</span>
+    <span class="na">contractURL</span><span class="pi">:</span> <span class="s">https://example.org/contracts/default</span>
+</code></pre></div>
+<p>Once profiles are used, a Data Access interface can explicitly reference the contract that governs it:</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">dataAccess</span><span class="pi">:</span>
+  <span class="na">API</span><span class="pi">:</span>
+    <span class="na">outputPortType</span><span class="pi">:</span> <span class="s">API</span>
+    <span class="na">contract</span><span class="pi">:</span>
+      <span class="s">$ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">#/product/contract/default'</span>
+</code></pre></div>
+<p>Migration to profiles is recommended when a product needs several reusable contractual contexts, when several interfaces share one contract, or when an explicit Data Access-to-contract relationship is needed. No migration is required solely to keep an existing singleton document valid.</p>
 
-<p><strong>Purpose:</strong><br>
-- Express business <strong>objectives</strong> and <strong>strategic alignment</strong><br>
-- Define measurable <strong>product KPIs</strong><br>
-- Link to higher-level <strong>business KPIs (OKRs)</strong>  </p>
-
-<p><strong>Location in schema on the left example</strong></p>
-
-<p>See the <a href="https://opendataproducts.org/v4.1rc/schema">ODPS 4.1 schema</a> for full JSON/YAML definitions.</p>
-<h3 id='backward-compatibility'>Backward Compatibility</h3>
 <table><thead>
 <tr>
-<th>ODPS 4.0 Element</th>
-<th>ODPS 4.1 Change</th>
-<th>Action Required</th>
+<th>ODPS 4.1 form</th>
+<th>ODPS 4.2 behavior</th>
+<th>Action required</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>All existing objects (<code>details</code>, <code>SLA</code>, <code>dataQuality</code>, etc.)</td>
-<td>No change</td>
+<td>Singleton <code>product.contract</code></td>
+<td>Still valid for compatibility</td>
 <td>None</td>
 </tr>
 <tr>
-<td><code>productStrategy</code></td>
-<td>New optional block</td>
-<td>Add only if you want to link products to KPIs/OKRs</td>
+<td>Named contract profiles</td>
+<td>New; inline collections require <code>default</code></td>
+<td>Use for new implementations</td>
+</tr>
+<tr>
+<td><code>dataAccess.&lt;profile&gt;.contract</code></td>
+<td>New reference-only binding</td>
+<td>Add when an access interface must identify its contract profile</td>
+</tr>
+<tr>
+<td>External contract profile package</td>
+<td>New; referenced collection must contain <code>default</code></td>
+<td>Use when profiles are governed outside the product document</td>
 </tr>
 </tbody></table>
-
-<p>No breaking or renaming occurred.<br>
-Tooling built on 4.0 will continue to work.</p>
-<h3 id='how-to-extend-an-existing-4-0-file'>How to Extend an Existing 4.0 File</h3><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">productStrategy</span><span class="pi">:</span>
+<h2 id='earlier-odps-4-0-4-1-migration'>Earlier ODPS 4.0 → 4.1 migration</h2>
+<p>ODPS 4.1 added the optional <code>productStrategy</code> object for business objectives, strategic alignment, product KPIs, and links to higher-level business KPIs. Existing 4.0 objects were not renamed or removed.</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">productStrategy</span><span class="pi">:</span>
   <span class="na">objectives</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">en</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Enable</span><span class="nv"> </span><span class="s">smarter</span><span class="nv"> </span><span class="s">marketing</span><span class="nv"> </span><span class="s">campaigns"</span>
+    <span class="pi">-</span> <span class="na">en</span><span class="pi">:</span> <span class="s">Enable smarter marketing campaigns</span>
   <span class="na">contributesToKPI</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s2">"</span><span class="s">KPI-OUT-001"</span>
-    <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Retail</span><span class="nv"> </span><span class="s">Revenue</span><span class="nv"> </span><span class="s">Uplift"</span>
-    <span class="na">unit</span><span class="pi">:</span> <span class="s2">"</span><span class="s">percent"</span>
+    <span class="na">id</span><span class="pi">:</span> <span class="s">KPI-OUT-001</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">Retail Revenue Uplift</span>
+    <span class="na">unit</span><span class="pi">:</span> <span class="s">percent</span>
     <span class="na">target</span><span class="pi">:</span> <span class="m">5</span>
     <span class="na">direction</span><span class="pi">:</span> <span class="s">increase</span>
-    <span class="na">timeframe</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2025-Q4"</span>
+    <span class="na">timeframe</span><span class="pi">:</span> <span class="s">2025-Q4</span>
   <span class="na">productKPIs</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s2">"</span><span class="s">KPI-OUT-001-A"</span>
-      <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Customer</span><span class="nv"> </span><span class="s">dataset</span><span class="nv"> </span><span class="s">usage"</span>
-      <span class="na">unit</span><span class="pi">:</span> <span class="s2">"</span><span class="s">downloads"</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">KPI-OUT-001-A</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">Customer dataset usage</span>
+      <span class="na">unit</span><span class="pi">:</span> <span class="s">downloads</span>
       <span class="na">target</span><span class="pi">:</span> <span class="m">4000</span>
 </code></pre></div>
-<p>Add the block under <code>product:</code> like in the example.  </p>
-<h3 id='summary'>Summary</h3>
-<table><thead>
-<tr>
-<th>Topic</th>
-<th>4.0</th>
-<th>4.1</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Specification type</td>
-<td>Modular YAML schema</td>
-<td>Same</td>
-</tr>
-<tr>
-<td>New object</td>
-<td>—</td>
-<td><code>productStrategy</code></td>
-</tr>
-<tr>
-<td>Business linkage</td>
-<td>External</td>
-<td>Built-in</td>
-</tr>
-<tr>
-<td>Compatibility</td>
-<td>—</td>
-<td>100 % backward-compatible</td>
-</tr>
-</tbody></table>
-<h3 id='next-steps'>Next Steps</h3>
-<ul>
-<li>Update internal templates or tools if you want to capture KPI/OKR alignment.<br></li>
-<li>No urgent migration is required for existing 4.0 files.<br></li>
-</ul>
+<p>Add the block under <code>product</code> only when business outcome alignment is needed.</p>
 <h1 id='terms-used'>Terms used</h1>
 <p>Here&#39;s list of terms used and what we mean with them. The meaning of terms is mostly taken from existing knowledge eg articles and other trusted sources. The source is always linked to the term. In some rare cases term is defined for the specification purposes only. </p>
 

@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title": "ODPS schema",
-    "description": "This is the schema for ODPS v4.1.",
+    "description": "This is the schema for ODPS v4.2.",
     "type": "object",
     "properties": {
         "schema": {
@@ -16,7 +16,7 @@
             ],
             "description": "Current ODPS version.",
             "examples": [
-                "v4.1",
+                "v4.2",
                 "dev"
             ]
         },
@@ -218,7 +218,7 @@
                 },
                 "contract": {
                     "type": "object",
-                    "$ref": "#/$defs/Contract"
+                    "$ref": "#/$defs/ContractConfiguration"
                 },
                 "SLA": {
                     "type": "object",
@@ -264,12 +264,12 @@
     "$defs": {
         "Contract": {
             "type": "object",
-            "description": "Binds together data contract details.",
+            "description": "Defines one data contract, either by external reference, metadata and URL, or inline specification.",
             "properties": {
                 "$ref": {
                     "type": "string",
-                    "format": "uri",
-                    "description": "Points to the contract content, local file or online. You can use this or then the other described approaches to define elements of the contract."
+                    "format": "uri-reference",
+                    "description": "Points to the content of this individual contract profile in a local or external file."
                 },
                 "id": {
                     "type": "string",
@@ -290,13 +290,91 @@
                 "contractURL": {
                     "type": "string",
                     "format": "uri",
-                    "description": "URL pointing to data contract in data ontract management service or alike."
+                    "description": "URL pointing to a data contract in a contract management service or similar system."
                 },
                 "spec": {
                     "type": "object",
                     "description": "Inline YAML element to add data contract details instead of using URL."
                 }
+            },
+            "minProperties": 1,
+            "additionalProperties": false
+        },
+        "ContractProfilePackageReference": {
+            "type": "object",
+            "description": "References an external package containing named data contract profiles. The referenced package must contain a default profile.",
+            "properties": {
+                "$ref": {
+                    "type": "string",
+                    "format": "uri-reference"
+                }
+            },
+            "required": [
+                "$ref"
+            ],
+            "additionalProperties": false
+        },
+        "ContractProfileCollection": {
+            "type": "object",
+            "description": "Inline collection of one or more named data contract profiles. The default profile is required.",
+            "properties": {
+                "default": {
+                    "$ref": "#/$defs/Contract"
+                }
+            },
+            "required": [
+                "default"
+            ],
+            "additionalProperties": {
+                "$ref": "#/$defs/Contract"
             }
+        },
+        "ContractProfiles": {
+            "description": "Named data contract profiles defined inline or supplied as an external package.",
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/ContractProfileCollection"
+                },
+                {
+                    "$ref": "#/$defs/ContractProfilePackageReference"
+                }
+            ]
+        },
+        "ContractConfiguration": {
+            "description": "A legacy singleton contract or the recommended named contract profile collection.",
+            "oneOf": [
+                {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/Contract"
+                        },
+                        {
+                            "not": {
+                                "required": [
+                                    "$ref"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "$ref": "#/$defs/ContractProfiles"
+                }
+            ]
+        },
+        "ContractReference": {
+            "type": "object",
+            "description": "Reference from a Data Access profile to a named data contract profile.",
+            "properties": {
+                "$ref": {
+                    "type": "string",
+                    "format": "uri-reference"
+                }
+            },
+            "required": [
+                "$ref"
+            ],
+            "additionalProperties": false
         },
         "Sla": {
             "type": "object",
@@ -999,6 +1077,10 @@
                     "type": "string",
                     "format": "uri",
                     "description": "A human-readable documentation or guide for access setup, authentication steps, or onboarding."
+                },
+                "contract": {
+                    "$ref": "#/$defs/ContractReference",
+                    "description": "Optional reference to the named data contract profile governing this access interface."
                 },
                 "hashType": {
                     "type": "string",
