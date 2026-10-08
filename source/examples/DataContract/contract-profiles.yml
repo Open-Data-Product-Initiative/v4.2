@@ -1,0 +1,24 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
+product:
+  contract:
+    default:
+      id: CONTRACT-001
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: https://example.org/contracts/default
+    internal:
+      id: CONTRACT-002
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: https://example.org/contracts/internal
+  details:
+    en:
+      name: Contract profiles example
+      productID: contract-profiles-example
+      valueProposition: Provides reusable contractual contexts.
+      description: A focused product with default and internal contract profiles.
+      visibility: public
+      status: production
+      type: dataset
+      productVersion: 1.0.0

@@ -1,6 +1,6 @@
 # ODPS Template Family: Smaller Starting Points for Real Data Products
 
-ODPS v4.1 can describe a broad range of data products. That is the point of a standard: it must be complete enough for different organizations, products, access patterns, contracts, governance needs, and operational models.
+ODPS v4.2 can describe a broad range of data products. That is the point of a standard: it must be complete enough for different organizations, products, access patterns, contracts, governance needs, and operational models.
 
 But completeness creates a practical adoption problem.
 

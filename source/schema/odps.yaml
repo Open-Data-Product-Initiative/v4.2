@@ -1,5 +1,5 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
-title: ODPS 4.1 Schema
+title: ODPS 4.2 Schema
 type: object
 required: [schema, version, product]
 properties:
@@ -14,17 +14,7 @@ properties:
     properties:
       contract:
         type: object
-        required: [id, type, contractVersion, contractURL]
-        properties:
-          id:
-            type: string
-          type:
-            type: string
-          contractVersion:
-            type: string
-          contractURL:
-            type: string
-            format: uri
+        $ref: "#/$defs/ContractConfiguration"
 
       details:
         type: object
@@ -270,12 +260,7 @@ properties:
 
       dataAccess:
         type: object
-        additionalProperties:
-          type: object
-          required: [outputPortType]
-          properties:
-            outputPortType:
-              type: string
+        $ref: "#/$defs/DataAccess"
 
       paymentGateways:
         type: object
@@ -296,3 +281,118 @@ properties:
           en:
             type: object
             required: [legalName]
+
+$defs:
+  Contract:
+    type: object
+    description: Defines one data contract, either by external reference, metadata and URL, or inline specification.
+    properties:
+      $ref:
+        type: string
+        format: uri-reference
+        description: Points to the content of this individual contract profile in a local or external file.
+      id:
+        type: string
+        description: UUID of the data contract.
+      type:
+        type: string
+        description: Defines the standard used in the data contract.
+        enum: [ODCS, DCS]
+      contractVersion:
+        type: string
+        description: Version of the standard used to define the Data Contract.
+      contractURL:
+        type: string
+        format: uri
+        description: URL pointing to a data contract in a contract management service or similar system.
+      spec:
+        type: object
+        description: Inline YAML element containing data contract details.
+    minProperties: 1
+    additionalProperties: false
+
+  ContractProfilePackageReference:
+    type: object
+    description: References an external package containing named data contract profiles. The referenced package must contain a default profile.
+    properties:
+      $ref:
+        type: string
+        format: uri-reference
+    required: [$ref]
+    additionalProperties: false
+
+  ContractProfileCollection:
+    type: object
+    description: Inline collection of one or more named data contract profiles. The default profile is required.
+    properties:
+      default:
+        $ref: "#/$defs/Contract"
+    required: [default]
+    additionalProperties:
+      $ref: "#/$defs/Contract"
+
+  ContractProfiles:
+    description: Named data contract profiles defined inline or supplied as an external package.
+    oneOf:
+      - $ref: "#/$defs/ContractProfileCollection"
+      - $ref: "#/$defs/ContractProfilePackageReference"
+
+  ContractConfiguration:
+    description: A legacy singleton contract or the recommended named contract profile collection.
+    oneOf:
+      - allOf:
+          - $ref: "#/$defs/Contract"
+          - not:
+              required: [$ref]
+      - $ref: "#/$defs/ContractProfiles"
+
+  ContractReference:
+    type: object
+    description: Reference from a Data Access profile to a named data contract profile.
+    properties:
+      $ref:
+        type: string
+        format: uri-reference
+    required: [$ref]
+    additionalProperties: false
+
+  DataAccess:
+    type: object
+    description: Named data access definitions, commonly including default.
+    additionalProperties:
+      $ref: "#/$defs/DataAccessItem"
+
+  DataAccessItem:
+    type: object
+    required: [outputPortType]
+    properties:
+      name:
+        type: object
+      description:
+        type: object
+      outputPortType:
+        type: string
+      format:
+        type: string
+        enum: [TOON, JSON, XML, CSV, Excel, zip, plain text, GraphQL, MCP]
+      authenticationMethod:
+        type: string
+        enum: [OAuth, Token, API key, HTTP Basic, none]
+      specification:
+        type: string
+        enum: [OAS, RAML, Slate, MCP]
+      specsURL:
+        type: string
+        format: uri
+      accessURL:
+        type: string
+        format: uri
+      documentationURL:
+        type: string
+        format: uri
+      contract:
+        $ref: "#/$defs/ContractReference"
+      hashType:
+        type: string
+      checksum:
+        type: string

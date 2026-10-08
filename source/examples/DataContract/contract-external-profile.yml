@@ -1,0 +1,16 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
+product:
+  contract:
+    default:
+      $ref: https://example.org/contracts/default.yaml
+  details:
+    en:
+      name: External contract profile example
+      productID: external-contract-profile-example
+      valueProposition: Reuses an externally governed individual contract.
+      description: The default profile loads its Contract object from another file.
+      visibility: public
+      status: production
+      type: dataset
+      productVersion: 1.0.0

@@ -5,8 +5,8 @@
 ```yml
 
 ---
-schema: 'https://opendataproducts.org/v4.1/schema/odps.yaml'
-version: '4.1'
+schema: 'https://opendataproducts.org/v4.2/schema/odps.yaml'
+version: '4.2'
 product:
   productStrategy:
     objectives:
@@ -45,10 +45,16 @@ product:
         direction: at_most
         calculation: p50(update_ts - event_ts)
   contract:
-    id: 02323M123
-    type: ODCS
-    contractVersion: 2.2.2
-    contractURL: 'https://datamesh-manager.com/urbanltd/dataproducts/9bd530'
+    default:
+      id: 02323M123
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: 'https://datamesh-manager.com/urbanltd/dataproducts/9bd530'
+    internal:
+      id: 02323M124
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: 'https://datamesh-manager.com/urbanltd/dataproducts/9bd531'
   details:
     en:
       name: UrbanPulse Events
@@ -78,7 +84,7 @@ product:
         - tourism
         - smartcity
       standards:
-        - ODPS 4.0
+        - ODPS 4.2
       tags:
         - smartcity
         - events
@@ -264,6 +270,8 @@ product:
       accessURL: 'https://data.cms.gov/data-api/v1/dataset/2/data'
       specsURL: 'https://data.cms.gov/provr-enrollment/api-docs'
       documentationURL: 'https://data.cms.gov/provr-enrollment/docs'
+      contract:
+        $ref: '#/product/contract/default'
     Agent:
       outputPortType: AI
       description:
@@ -273,6 +281,8 @@ product:
       format: MCP
       specsURL: 'https://urbanpulse.ai/llms.txt'
       documentationURL: 'https://urbanpulse.ai/llms-full.txt'
+      contract:
+        $ref: '#/product/contract/default'
   paymentGateways:
     default:
       description:

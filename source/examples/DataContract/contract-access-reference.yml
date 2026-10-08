@@ -1,0 +1,42 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
+product:
+  contract:
+    default:
+      id: CONTRACT-001
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: https://example.org/contracts/default
+    restricted:
+      id: CONTRACT-002
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: https://example.org/contracts/restricted
+  dataAccess:
+    API:
+      outputPortType: API
+      format: JSON
+      accessURL: https://example.org/api
+      contract:
+        $ref: '#/product/contract/default'
+    agent:
+      outputPortType: AI
+      specification: MCP
+      format: MCP
+      contract:
+        $ref: '#/product/contract/default'
+    restrictedAPI:
+      outputPortType: API
+      authenticationMethod: OAuth
+      contract:
+        $ref: '#/product/contract/restricted'
+  details:
+    en:
+      name: Contract binding example
+      productID: contract-binding-example
+      valueProposition: Makes the contract governing each interface explicit.
+      description: Multiple access profiles reference reusable contract profiles.
+      visibility: public
+      status: production
+      type: dataset
+      productVersion: 1.0.0

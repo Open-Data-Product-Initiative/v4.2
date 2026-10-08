@@ -2,11 +2,11 @@
 
 ## Purpose
 
-ODPS v4.1 is broad enough to describe many kinds of data products. A single full-schema example is too large for adoption. A small set of applied templates helps users start from the right pattern without learning the full schema first.
+ODPS v4.2 is broad enough to describe many kinds of data products. A single full-schema example is too large for adoption. A small set of applied templates helps users start from the right pattern without learning the full schema first.
 
 This plan defines an ODPS template family that can be added to the ODPS specification, documentation, examples, and SDK tooling.
 
-The templates should be treated as application skeletons. They do not require new schema fields. They reuse the existing ODPS v4.1 schema areas.
+The templates should be treated as application skeletons. They do not require new schema fields. They reuse the existing ODPS v4.2 schema areas.
 
 ## Design principles
 
@@ -66,8 +66,8 @@ It answers:
 ### YAML skeleton
 
 ```yaml
-schema: https://opendataproducts.org/v4.1/schema/odps.yaml
-version: "v4.1"
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: "4.2"
 
 product:
   details:
@@ -122,8 +122,8 @@ It answers:
 ### YAML skeleton
 
 ```yaml
-schema: https://opendataproducts.org/v4.1/schema/odps.yaml
-version: "v4.1"
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: "4.2"
 
 product:
   details:
@@ -233,8 +233,8 @@ It answers:
 ### YAML skeleton
 
 ```yaml
-schema: https://opendataproducts.org/v4.1/schema/odps.yaml
-version: "v4.1"
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: "4.2"
 
 product:
   details:
@@ -351,8 +351,8 @@ It answers:
 ### YAML skeleton
 
 ```yaml
-schema: https://opendataproducts.org/v4.1/schema/odps.yaml
-version: "v4.1"
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: "4.2"
 
 product:
   details:
@@ -503,8 +503,8 @@ It answers:
 ### YAML skeleton
 
 ```yaml
-schema: https://opendataproducts.org/v4.1/schema/odps.yaml
-version: "v4.1"
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: "4.2"
 
 product:
   details:
@@ -660,4 +660,3 @@ product:
       accessURL: "{{accessUrl}}"
       documentationURL: "{{documentationUrl}}"
 ```
-

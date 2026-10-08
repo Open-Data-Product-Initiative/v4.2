@@ -84,11 +84,11 @@ def yaml_blocks(path: Path) -> list[tuple[int, str]]:
     return [(index, match.group(1)) for index, match in enumerate(pattern.finditer(text), 1)]
 
 
-def is_v41_document(value: Any) -> bool:
+def is_current_document(value: Any) -> bool:
     if not isinstance(value, dict) or "product" not in value:
         return False
     schema = str(value.get("schema", ""))
-    return "v4.1/schema/odps" in schema
+    return "v4.2/schema/odps" in schema
 
 
 def has_template_placeholders(value: Any) -> bool:
@@ -121,9 +121,9 @@ def should_schema_validate(value: Any) -> bool:
     return not contains_placeholder(value) and not is_ref_only(value) and not is_ref_map(value)
 
 
-def is_complete_v41_document(value: Any) -> bool:
+def is_complete_current_document(value: Any) -> bool:
     return (
-        is_v41_document(value)
+        is_current_document(value)
         and isinstance(value.get("product"), dict)
         and "details" in value["product"]
     )
@@ -191,9 +191,10 @@ def validate_markdown_yaml_examples(
                 failures.append(Failure("markdown-yaml-parse", location, "empty YAML block"))
                 continue
 
-            if is_complete_v41_document(parsed) and should_schema_validate(parsed):
-                validate_instance(failures, "markdown-v41-json-schema", location, parsed, json_schema)
-                validate_instance(failures, "markdown-v41-yaml-schema", location, parsed, yaml_schema)
+            if is_complete_current_document(parsed) and should_schema_validate(parsed):
+                validate_instance(failures, "markdown-v42-json-schema", location, parsed, json_schema)
+                validate_instance(failures, "markdown-v42-yaml-schema", location, parsed, yaml_schema)
+                validate_internal_refs(failures, "markdown-ref-resolution", location, parsed)
                 continue
 
             if isinstance(parsed, dict) and len(parsed) == 1:
@@ -232,9 +233,22 @@ def validate_standalone_yaml_examples(
             failures.append(Failure("example-yaml-parse", location, str(exc).splitlines()[0]))
             continue
 
-        if is_complete_v41_document(parsed) and should_schema_validate(parsed):
-            validate_instance(failures, "example-v41-json-schema", location, parsed, json_schema)
-            validate_instance(failures, "example-v41-yaml-schema", location, parsed, yaml_schema)
+        if is_complete_current_document(parsed) and should_schema_validate(parsed):
+            validate_instance(failures, "example-v42-json-schema", location, parsed, json_schema)
+            validate_instance(failures, "example-v42-yaml-schema", location, parsed, yaml_schema)
+            validate_internal_refs(failures, "example-ref-resolution", location, parsed)
+            continue
+
+        if path.name == "contract-profiles-package.yml":
+            for schema_name, schema in (("json", json_schema), ("yaml", yaml_schema)):
+                collection = resolve_ref(schema, "#/$defs/ContractProfileCollection")
+                validate_instance(
+                    failures,
+                    f"contract-package-{schema_name}-schema",
+                    location,
+                    parsed,
+                    standalone_subschema(schema, collection),
+                )
 
 
 def template_links() -> list[Path]:
@@ -307,8 +321,8 @@ def validate_template_family(
                 Failure("template-family-placeholders", location, "unresolved placeholder remains after materialization")
             )
             continue
-        if not is_complete_v41_document(materialized):
-            failures.append(Failure("template-family-document", location, "template does not materialize to a v4.1 document"))
+        if not is_complete_current_document(materialized):
+            failures.append(Failure("template-family-document", location, "template does not materialize to a v4.2 document"))
             continue
         validate_instance(failures, "template-family-json-schema", location, materialized, json_schema)
         validate_instance(failures, "template-family-yaml-schema", location, materialized, yaml_schema)
@@ -394,6 +408,142 @@ def internal_pointer_exists(document: Any, ref: str) -> bool:
     return True
 
 
+def validate_internal_refs(failures: list[Failure], check: str, location: str, document: Any) -> None:
+    for ref in find_refs(document):
+        if ref.startswith("#/") and not internal_pointer_exists(document, ref):
+            failures.append(Failure(check, f"{location} {ref}", "internal reference does not resolve"))
+
+
+def minimal_document() -> dict[str, Any]:
+    return {
+        "schema": "https://opendataproducts.org/v4.2/schema/odps.yaml",
+        "version": 4.2,
+        "product": {
+            "details": {
+                "en": {
+                    "name": "Contract profile validation product",
+                    "productID": "contract-profile-validation",
+                    "valueProposition": "Validates reusable data contract profiles.",
+                    "description": "A focused validation fixture.",
+                    "visibility": "public",
+                    "status": "production",
+                    "type": "dataset",
+                    "productVersion": "1.0.0",
+                }
+            }
+        },
+    }
+
+
+def with_product_fields(**fields: Any) -> dict[str, Any]:
+    document = minimal_document()
+    document["product"].update(fields)
+    return document
+
+
+def validate_contract_profile_feature(
+    failures: list[Failure],
+    json_schema: dict[str, Any],
+    yaml_schema: dict[str, Any],
+) -> None:
+    metadata_contract = {
+        "id": "CONTRACT-001",
+        "type": "ODCS",
+        "contractVersion": "2.2.2",
+        "contractURL": "https://example.org/contracts/default",
+    }
+    second_contract = {
+        "id": "CONTRACT-002",
+        "type": "ODCS",
+        "contractVersion": "2.2.2",
+        "contractURL": "https://example.org/contracts/internal",
+    }
+    valid_cases = {
+        "legacy singleton": with_product_fields(contract=metadata_contract),
+        "default profile": with_product_fields(contract={"default": metadata_contract}),
+        "several profiles": with_product_fields(
+            contract={"default": metadata_contract, "internal": second_contract}
+        ),
+        "profile package reference": with_product_fields(
+            contract={"$ref": "https://example.org/contracts/contract-profiles.yaml"}
+        ),
+        "individual profile reference": with_product_fields(
+            contract={"default": {"$ref": "https://example.org/contracts/default.yaml"}}
+        ),
+        "inline profile spec": with_product_fields(
+            contract={
+                "default": {
+                    "id": "CONTRACT-001",
+                    "type": "ODCS",
+                    "contractVersion": "2.2.2",
+                    "spec": {"apiVersion": "v2.2.2"},
+                }
+            }
+        ),
+        "shared data access reference": with_product_fields(
+            contract={"default": metadata_contract},
+            dataAccess={
+                "API": {
+                    "outputPortType": "API",
+                    "contract": {"$ref": "#/product/contract/default"},
+                },
+                "agent": {
+                    "outputPortType": "AI",
+                    "specification": "MCP",
+                    "contract": {"$ref": "#/product/contract/default"},
+                },
+            },
+        ),
+    }
+    invalid_cases = {
+        "profile collection without default": with_product_fields(contract={"internal": second_contract}),
+        "inline contract under data access": with_product_fields(
+            dataAccess={
+                "API": {
+                    "outputPortType": "API",
+                    "contract": {"id": "CONTRACT-001", "type": "ODCS"},
+                }
+            }
+        ),
+        "empty data access contract reference": with_product_fields(
+            dataAccess={"API": {"outputPortType": "API", "contract": {}}}
+        ),
+    }
+
+    for case_name, instance in valid_cases.items():
+        outcomes: list[bool] = []
+        for schema_name, schema in (("json", json_schema), ("yaml", yaml_schema)):
+            errors = list(Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(instance))
+            outcomes.append(not errors)
+            if errors:
+                failures.append(
+                    Failure(
+                        "contract-profile-acceptance",
+                        f"{case_name} ({schema_name})",
+                        errors[0].message,
+                    )
+                )
+        if len(set(outcomes)) != 1:
+            failures.append(Failure("contract-profile-parity", case_name, "JSON and YAML schemas disagree"))
+        validate_internal_refs(failures, "contract-profile-ref-resolution", case_name, instance)
+
+    for case_name, instance in invalid_cases.items():
+        outcomes = []
+        for schema_name, schema in (("json", json_schema), ("yaml", yaml_schema)):
+            accepted = not list(Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(instance))
+            outcomes.append(accepted)
+            if accepted:
+                failures.append(
+                    Failure(
+                        "contract-profile-negative",
+                        f"{case_name} ({schema_name})",
+                        "invalid fixture was accepted",
+                    )
+                )
+        if len(set(outcomes)) != 1:
+            failures.append(Failure("contract-profile-parity", case_name, "JSON and YAML schemas disagree"))
+
+
 def normalize_type(schema_node: dict[str, Any]) -> set[str]:
     value = schema_node.get("type")
     if isinstance(value, str):
@@ -460,14 +610,65 @@ def validate_schema_alignment(
                 )
             )
 
-    json_access = resolve_ref(json_schema, "#/$defs/DataAccessItem")
-    if "outputPortType" not in json_access.get("properties", {}):
-        failures.append(Failure("schema-canonical-field", "#/$defs/DataAccessItem", "missing outputPortType"))
+    for definition in (
+        "Contract",
+        "ContractProfileCollection",
+        "ContractProfiles",
+        "ContractConfiguration",
+        "ContractReference",
+        "DataAccessItem",
+    ):
+        json_node = json_schema.get("$defs", {}).get(definition)
+        yaml_node = yaml_schema.get("$defs", {}).get(definition)
+        if not json_node or not yaml_node:
+            failures.append(Failure("schema-definition-alignment", definition, "missing in one schema"))
 
-    yaml_access = pointer(yaml_schema, ("product", "dataAccess"))
-    yaml_required = yaml_access.get("additionalProperties", {}).get("required", []) if yaml_access else []
-    if "outputPortType" not in yaml_required:
-        failures.append(Failure("schema-canonical-field", "/product/dataAccess", "outputPortType is not required"))
+    for definition in ("Contract", "ContractReference"):
+        json_node = resolve_ref(json_schema, f"#/$defs/{definition}")
+        yaml_node = resolve_ref(yaml_schema, f"#/$defs/{definition}")
+        json_props = set(json_node.get("properties", {}))
+        yaml_props = set(yaml_node.get("properties", {}))
+        if json_props != yaml_props:
+            failures.append(
+                Failure(
+                    "schema-contract-field-alignment",
+                    definition,
+                    f"JSON-only {sorted(json_props - yaml_props)}; YAML-only {sorted(yaml_props - json_props)}",
+                )
+            )
+        if set(json_node.get("required", [])) != set(yaml_node.get("required", [])):
+            failures.append(Failure("schema-contract-required-alignment", definition, "required fields differ"))
+        if json_node.get("additionalProperties") != yaml_node.get("additionalProperties"):
+            failures.append(Failure("schema-contract-closure-alignment", definition, "additionalProperties differs"))
+
+    for schema_name, schema in (("json", json_schema), ("yaml", yaml_schema)):
+        collection = resolve_ref(schema, "#/$defs/ContractProfileCollection")
+        if "default" not in collection.get("required", []):
+            failures.append(
+                Failure(
+                    "schema-contract-default",
+                    f"{schema_name} ContractProfileCollection",
+                    "default profile is not required",
+                )
+            )
+        contract_reference = resolve_ref(schema, "#/$defs/ContractReference")
+        if contract_reference.get("required") != ["$ref"] or contract_reference.get("additionalProperties") is not False:
+            failures.append(
+                Failure(
+                    "schema-contract-reference",
+                    f"{schema_name} ContractReference",
+                    "reference must require only $ref and reject extra properties",
+                )
+            )
+        access_item = resolve_ref(schema, "#/$defs/DataAccessItem")
+        if access_item.get("properties", {}).get("contract", {}).get("$ref") != "#/$defs/ContractReference":
+            failures.append(
+                Failure(
+                    "schema-data-access-contract",
+                    f"{schema_name} DataAccessItem",
+                    "contract does not use ContractReference",
+                )
+            )
 
 
 def validate_forbidden_drift(failures: list[Failure]) -> None:
@@ -495,6 +696,7 @@ def main() -> int:
     validate_standalone_yaml_examples(failures, json_schema, yaml_schema)
     validate_template_family(failures, json_schema, yaml_schema)
     validate_hello_world_text_alignment(failures)
+    validate_contract_profile_feature(failures, json_schema, yaml_schema)
     validate_forbidden_drift(failures)
 
     if failures:

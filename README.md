@@ -12,9 +12,30 @@ It is designed for **both open and commercial data products**, supporting intero
 
 ---
 
-## New in ODPS 4.1 — Connecting Data Products to Business Outcomes
+## New in ODPS 4.2 — Reusable Data Contract Profiles
 
-Version 4.1 introduces the **`productStrategy`** object — a new addition that connects data products directly to measurable business goals.  
+Version 4.2 adds named Data Contract profiles under `product.contract`. Inline profile collections require `default`, may include additional contexts such as `internal` or `restricted`, and may be externalized as reusable packages. Data Access profiles can reference the contract profile that governs an interface.
+
+The ODPS 4.1 singleton Contract form remains valid for backward compatibility. Profile-based contracts are recommended for new implementations.
+
+```yaml
+product:
+  contract:
+    default:
+      id: CONTRACT-001
+      type: ODCS
+      contractVersion: 2.2.2
+      contractURL: https://example.org/contracts/default
+  dataAccess:
+    API:
+      outputPortType: API
+      contract:
+        $ref: '#/product/contract/default'
+```
+
+## Introduced in ODPS 4.1 — Connecting Data Products to Business Outcomes
+
+Version 4.1 introduced the **`productStrategy`** object — an addition that connects data products directly to measurable business goals.
 
 Data products can now declare:
 

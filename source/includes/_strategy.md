@@ -20,9 +20,9 @@ By embedding both primary and related KPI connections directly into the product 
 > Example of catalog object usage:
 
 ```yml
-schema: https://opendataproducts.org/v4.1/schema/odps.yaml
-# JSON schema: https://opendataproducts.org/v4.1/schema/odps.json
-version: 4.1
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+# JSON schema: https://opendataproducts.org/v4.2/schema/odps.json
+version: 4.2
 product:
   productStrategy:
     status: Planned

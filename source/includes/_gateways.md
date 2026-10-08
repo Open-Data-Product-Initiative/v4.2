@@ -23,11 +23,11 @@ Named gateway definitions (e.g., `default`, `Agent`) can be **reused across pric
 > referencing examples:
 
 ```text
-  $ref: '#/Product/paymentGateways/default'
+  $ref: '#/product/paymentGateways/default'
 
   ...
 
-  $ref: '#/Product/dataQuality/agent'
+  $ref: '#/product/dataQuality/agent'
 ```
 
 **The Role of `default`:**

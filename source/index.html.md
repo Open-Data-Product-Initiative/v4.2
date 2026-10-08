@@ -1,5 +1,5 @@
 ---
-title: Open (source) Data Product Specification 4.1 Version | Linux Foundation 
+title: Open (source) Data Product Specification 4.2 Version | Linux Foundation
 
 language_tabs: # must be one of https://git.io/vQNgJ
 - yaml
@@ -40,7 +40,7 @@ meta:
 
 # OPEN DATA PRODUCT SPECIFICATION - The Linux Foundation
 
-## Version 4.1 
+## Version 4.2
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in BCP 14 ([RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) and [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)) when, and only when, they appear in all capitals, as shown here.
 
@@ -49,18 +49,18 @@ Development of the specification is under the umbrella of the Linux Foundation.
 
 | Topic | Link | Description |
 |---|---|---|
-| Version source | <a href="https://github.com/Open-Data-Product-Initiative/v4.1">Open Data Product Specification 4.1 on GitHub</a> | Official source repository for the ODPS 4.1 specification |
-| ODPS YAML schema | <a href="https://opendataproducts.org/v4.1/schema/odps.yaml">YAML Schema</a> | Machine-readable schema definition in YAML format |
-| ODPS JSON schema | <a href="https://opendataproducts.org/v4.1/schema/odps.json">JSON Schema</a> | Machine-readable schema definition in JSON format |
-| Migration guide | [Migration guide available](#odps-4-0-4-1-migration-guide) | Notes and guidance for upgrading from ODPS 4.0 to 4.1 |
+| Version source | <a href="https://github.com/Open-Data-Product-Initiative/v4.2">Open Data Product Specification 4.2 on GitHub</a> | Official source repository for the ODPS 4.2 specification |
+| ODPS YAML schema | <a href="https://opendataproducts.org/v4.2/schema/odps.yaml">YAML Schema</a> | Machine-readable schema definition in YAML format |
+| ODPS JSON schema | <a href="https://opendataproducts.org/v4.2/schema/odps.json">JSON Schema</a> | Machine-readable schema definition in JSON format |
+| Migration guide | [Migration guide available](#odps-4-1-4-2-migration-guide) | Notes and guidance for upgrading from ODPS 4.1 to 4.2 |
 | Knowledge Base | [ODPS Knowledge Base](https://opendataproducts.org/howto/) | Practical examples, FAQs, and implementation guidance |
-| Contribute | [Raise an issue in GitHub](https://github.com/Open-Data-Product-Initiative/v4.1/issues) | Submit issues or suggestions to the specification maintainers |
+| Contribute | [Raise an issue in GitHub](https://github.com/Open-Data-Product-Initiative/v4.2/issues) | Submit issues or suggestions to the specification maintainers |
 
 ## Introduction
 
 The Open Data Product Specification is a vendor-neutral, open-source machine-readable data product metadata model. It defines the objects and attributes as well as the structure of digital data products. The work is based on existing standards (schema.org), best practices and emerging concepts like Data Mesh. The reasoning is that we reuse and proudly copy instead of reinventing the wheel. More detailed information of the origin can be found from the [Open Data Product Specification homepage](http://www.opendataproducts.org). 
 
-**The ODPS 4.1 specification supports referencing mechanisms** that improve modularity, reduce duplication, and ease governance. Users can reference internal components, such as SLA, dataQuality, dataAccess, and paymentGateways, from other parts of the product definition using [JSON Reference syntax](https://json-spec.readthedocs.io/reference.html) ($ref). In addition, any of these components can be defined and maintained in external YAML files and included via URL-based references [Examples in the Knowledge Base](https://opendataproducts.org/howto/). This makes it possible: 
+**The ODPS 4.2 specification supports referencing mechanisms** that improve modularity, reduce duplication, and ease governance. Users can reference internal components, such as Data Contract profiles, SLA, dataQuality, dataAccess, and paymentGateways, from other parts of the product definition using [JSON Reference syntax](https://json-spec.readthedocs.io/reference.html) ($ref). In addition, these components can be defined and maintained in external YAML files and included via URL-based references [Examples in the Knowledge Base](https://opendataproducts.org/howto/). This makes it possible:
 
 * to reuse standardized SLA profiles, DQ rules, or access definitions across multiple data products, 
 * helping teams manage changes consistently, reduce errors, and 
@@ -73,10 +73,12 @@ Benefits of Referencing:
 * Scalability: You can support multiple audiences or markets with varying quality expectations.
 * Auditability: Clearly link machine-readable checks to business commitments.
 
+**ODPS 4.2 introduces named Data Contract profiles.** An inline profile collection requires `default`, supports additional contractual contexts such as `internal` or `restricted`, and can be maintained as an external package. Each Data Access profile may reference the applicable contract profile, allowing one contract to govern several interfaces without duplication. The ODPS 4.1 singleton Contract syntax remains valid for backward compatibility.
 
-**ODPS 4.1 introduces the productStrategy object**, a significant extension that connects data products to business intent, objectives, and KPIs. This release makes ODPS the first open specification where data products declare not just what they are but also why they exist and how success is measured.
 
-ODPS 4.1 has also been extended with **two optional attributes that support portfolio management and governance transparency for data products.**
+**ODPS 4.1 introduced the productStrategy object**, a significant extension that connects data products to business intent, objectives, and KPIs. That release made ODPS the first open specification where data products declare not just what they are but also why they exist and how success is measured.
+
+ODPS 4.1 also added **two optional attributes that support portfolio management and governance transparency for data products.**
 
 **The portfolioPriority attribute** allows organizations to express the relative importance of a data product within their overall data product portfolio. While lifecycle states describe maturity, portfolioPriority communicates strategic importance. This helps organizations prioritize development, allocate resources, and identify which products require stronger operational attention. Typical values include Critical, High, Medium, and Low.
 
@@ -122,7 +124,7 @@ The four aspects are described in 10 objects, which contain attributes and eleme
 ![odps-model](images/ODPS-design.png)
 
 
-If you see something missing, described inaccurately or plain wrong, or you want to comment the specification, [raise an issue in Github](https://github.com/Open-Data-Product-Initiative/v4.1/issues)
+If you see something missing, described inaccurately or plain wrong, or you want to comment the specification, [raise an issue in Github](https://github.com/Open-Data-Product-Initiative/v4.2/issues)
 
 ## Documentation structure
 
@@ -166,13 +168,13 @@ It is RECOMMENDED that the root Data Product document be named: dataproduct.json
 > Example of document level usage and structure:
 
 ```yml
-schema: https://opendataproducts.org/v4.1/schema/odps.yaml
-version: 4.1
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
 product:
 ```
 
 | <div style="width:150px">Element name</div>   | Type  | Options  | Description  |
 |---|---|---|---|
 | **schema** | URL | Valid URL. See more from [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986). | **REQUIRED** Defines the URL of Schema. Used often for validation purposes. |
-| **version** | string | This is the version of ODPS, for example dev or 4.1 | **REQUIRED** Defines the ODPS version. |
+| **version** | string | This is the version of ODPS, for example dev or 4.2 | **REQUIRED** Defines the ODPS version. |
 | **product** | element | root element | **REQUIRED** Root element to tie all together. |

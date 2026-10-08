@@ -8,16 +8,19 @@ The `details` object defines the business and governance details of the data pro
 > Example of details object usage:
 
 ```yml
-schema: https://opendataproducts.org/v4.0/schema/odps.yaml
-version: 4.1
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
 product:
   details: 
     en:
       name: Pets of the year
       productID: 123456are
+      valueProposition: Help pet stores select products for local customer needs.
+      description: A focused pet characteristics dataset.
       visibility: private
       status: draft
       type: dataset
+      productVersion: 1.0.0
 ```
 
 
@@ -37,8 +40,8 @@ product:
 > Example of details object usage:
 
 ```yml
-schema: https://opendataproducts.org/v4.1/schema/odps.yaml
-version: 4.1
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: 4.2
 product:
   details: 
     en:
