@@ -1,5 +1,7 @@
 # ODPS 4.1 → 4.2 Migration Guide
 
+> **Release Candidate guidance — not final release guidance.** This migration guide applies to the ODPS 4.2 RC published in this repository. Its rules and examples may change before the formal ODPS 4.2 release; use it to test and provide implementation feedback, not to represent v4.2 as final.
+
 ODPS 4.2 requires named Contract profiles. This is a breaking change for existing ODPS 4.1 documents that use a singleton `product.contract`: they must move that Contract under the required `default` profile.
 
 ## Required Contract migration

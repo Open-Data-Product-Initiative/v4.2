@@ -1,11 +1,13 @@
 # Changelog
 
-## ODPS 4.2 (Unreleased)
+## ODPS 4.2 Release Candidate (RC — not a final release)
+
+> This release candidate is for review, testing, and implementation feedback. Its schema, examples, and migration guidance may change before the formal ODPS 4.2 release.
 
 * Add reusable, named Data Contract profiles with a required `default` profile for inline collections.
 * Add reference-only Data Access bindings to named Data Contract profiles.
 * Add external Data Contract profile packages and external individual profile definitions.
-* Preserve the ODPS 4.1 singleton Contract form for backward compatibility while recommending profiles for new implementations.
+* Require migration of the ODPS 4.1 singleton Contract form to `contract.default` before validating as v4.2.
 
 ## Version 2.11.0
 
