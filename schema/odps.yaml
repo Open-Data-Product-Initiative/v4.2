@@ -1,7 +1,8 @@
 # Generated from source/schema/odps.json. Run python3 scripts/sync_schema_representations.py --write to refresh.
 $schema: https://json-schema.org/draft/2020-12/schema
-title: ODPS schema
-description: This is the schema for ODPS v4.2.
+title: ODPS v4.2 Release Candidate schema
+description: This is the pre-release schema for the ODPS v4.2 Release Candidate. It is not the final ODPS 4.2 release and
+  may change before formal publication.
 type: object
 properties:
   schema:
