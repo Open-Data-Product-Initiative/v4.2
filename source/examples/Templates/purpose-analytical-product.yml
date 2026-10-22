@@ -1,5 +1,5 @@
 schema: https://opendataproducts.org/v4.2/schema/odps.yaml
-version: 4.2
+version: "4.2"
 product:
   details:
     en:
@@ -74,7 +74,7 @@ product:
           - dimension: "{{enum: latency | uptime | responseTime | errorRate | endOfSupport | endOfLife | updateFrequency | timeToDetect | timeToNotify | timeToRepair | emailResponseTime}}"
             objective: "{{integer}}"
             weight: "{{integer}}"
-            unit: "{{enum: percent | milliseconds | seconds | minutes | days | weeks | months | years | never | date | null}}"
+            unit: "{{enum: percent | milliseconds | seconds | minutes | hours | days | weeks | months | years | never | date | null}}"
 
   dataAccess:
     default:
@@ -83,7 +83,8 @@ product:
       description:
         en: "{{string}}"
       outputPortType: "{{enum: file | API | SQL | AI | gRPC | sFTP}}"
-      format: "{{enum: TOON | JSON | XML | CSV | Excel | zip | plain text | GraphQL | MCP}}"
+      format: "{{enum: TOON | JSON | JSONL | XML | CSV | Excel | Parquet | zip | plain text | GraphQL | MCP}}"
+      compression: "{{enum: none | gzip | zstd}}"
       authenticationMethod: "{{enum: OAuth | Token | API key | HTTP Basic | none}}"
       specification: "{{enum: OAS | RAML | Slate | MCP}}"
       specsURL: "{{string: url}}"

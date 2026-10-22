@@ -7,7 +7,7 @@ The objects are not defined inline, but instead references a reusable definition
 ```yml
 
 schema: https://opendataproducts.org/v4.2/schema/odps.yaml
-version: 4.2
+version: "4.2"
 product:
   details:
     en:

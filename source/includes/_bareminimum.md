@@ -7,7 +7,7 @@ Example data product with just the mandatory elements and attributes. This is th
 ```yml
 
 schema: https://opendataproducts.org/v4.2/schema/odps.yaml
-version: 4.2
+version: "4.2"
 product:
   details:
     en:

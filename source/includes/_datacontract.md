@@ -8,7 +8,7 @@ When `contract` is defined inline, a profile named `default` is REQUIRED. The si
 
 ```yaml
 schema: https://opendataproducts.org/v4.2/schema/odps.yaml
-version: 4.2
+version: "4.2"
 product:
   contract:
     default:

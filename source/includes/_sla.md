@@ -200,7 +200,7 @@ SLA:
 | **dimensions** | array | - | Contains one or more SLA dimension objects. Each defines a measurable SLA metric such as uptime or responseTime. |
 | **dimension** | attribute | string, one of: *latency, uptime, responseTime, errorRate, endOfSupport, endOfLife, updateFrequency, timeToDetect, timeToNotify, timeToRepair, emailResponseTime* | Defines the SLA dimension. |
 | **objective** | attribute | integer | Target level to be achieved for the dimension (e.g., 99). |
-| **unit** | attribute | Options: percent, milliseconds, seconds, minutes, days, weeks, months, years, never, date, null | Measurement unit for the SLA objective. If "date" is used, format should be dd/mm/yyyy. |
+| **unit** | attribute | Options: percent, milliseconds, seconds, minutes, hours, days, weeks, months, years, never, date, null | Measurement unit for the SLA objective. If "date" is used, format should be dd/mm/yyyy. |
 | **weight** | attribute | integer | Optional. Relative importance as percentage of the SLA dimension when calculating the product's overall SLA score. Must be an integer (no decimals). User-editable. |
 | **displaytitle** | object | - | Dimension title to be shown in UIs. Localized per language. |
 | **description** | object | - | Description of the SLA package or specific dimension, localized per language. |

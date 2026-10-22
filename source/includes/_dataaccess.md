@@ -13,6 +13,8 @@ Each entry under `dataAccess` (such as `default`, `API`, or `Agent`) represents 
 - Bind an interface to the governing named Data Contract profile through `contract`
 - Promote **reusability** by referencing these interfaces throughout the ODPS YAML using `$ref`
 
+`format` names the representation itself. When the delivered bytes are compressed, declare that separately with `compression`; for example, use `format: JSONL` and `compression: zstd`, rather than creating a combined format value.
+
 Including an AI agent-specific access interface (`outputPortType: AI`) supports MCP-based agent interactions, aligning your product with **AI-native data delivery patterns**.
 
 #### Referencing Examples
@@ -39,12 +41,13 @@ dataAccess:
     accessURL: https://example.org/data/latest-dataset.zip
   dataonly:
     name:
-      en: Access to latest dataset
+      en: Access to compressed JSON Lines dataset
     description: 
-      en: Latest Dataset
+      en: Latest Dataset as JSON Lines compressed with Zstandard
     outputPortType: file
-    format: CSV
-    accessURL: https://example.org/data/latest-dataset.csv
+    format: JSONL
+    compression: zstd
+    accessURL: https://example.org/data/latest-dataset.jsonl.zst
   API:
     name:
       en: Access to API
@@ -105,7 +108,8 @@ dataAccess:
 | **name** | object | ISO 639-1 language codes (e.g., `en`) | Multilingual name for the access interface. Can be shown in UIs. |
 | **description** | object | ISO 639-1 language codes (e.g., `en`) | Multilingual description for the access interface. Supports user understanding. |
 | **outputPortType** | string | file, API, SQL, AI, gRPC, sFTP, etc. | Describes the technical method for delivering data (e.g., `file` for file downloads, `API` for web services). |
-| **format** | string | TOON, JSON, XML, CSV, Excel, zip, plain text, GraphQL, MCP | Specifies the data format made available through this access channel. |
+| **format** | string | TOON, JSON, JSONL, XML, CSV, Excel, Parquet, zip, plain text, GraphQL, MCP | Specifies the data format made available through this access channel. |
+| **compression** | string | none, gzip, zstd | OPTIONAL content compression applied to the delivered representation. Declare the underlying representation in `format`; for example, `format: JSONL` with `compression: zstd`. |
 | **authenticationMethod** | string | OAuth, Token, API key, HTTP Basic, none | Security model required to access the data. |
 | **specification** | string | OAS, RAML, Slate, MCP | Defines the type of API or protocol specification used to describe access (e.g., OpenAPI, RAML, or a custom protocol like MCP). |
 | **specsURL** | URL | Valid URL | Points to the machine-readable technical documentation (e.g., OpenAPI YAML). |

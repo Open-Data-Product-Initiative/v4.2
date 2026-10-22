@@ -52,10 +52,13 @@ COMPONENT_ROOTS = {
 FORBIDDEN_TEXT_PATTERNS = {
     "legacy outputPorttype spelling": r"\boutputPorttype\b",
     "legacy dataHolder businessId spelling": r"\bbusinessId\b",
-    "legacy displayTitle spelling": r"\bdisplayTitle\b",
     "lowercase recurring pricing unit": r"\bunit:\s+recurring\b",
     "short SLA reference path": r"#/product/SLA/(?:default|premium|gold)\b",
     "short dataQuality reference path": r"#/product/dataQuality/(?:default|premium)\b",
+}
+
+FORBIDDEN_CURRENT_DOCUMENTATION_PATTERNS = {
+    "legacy displayTitle spelling": r"\bdisplayTitle\b",
 }
 
 
@@ -276,6 +279,21 @@ def validate_standalone_yaml_examples(
                     location,
                     parsed,
                     standalone_subschema(schema, collection),
+                )
+
+        if path == EXAMPLES / "DQ" / "dataquality.yml":
+            data_quality = parsed.get("dataQuality") if isinstance(parsed, dict) else None
+            if not isinstance(data_quality, dict):
+                failures.append(Failure("data-quality-example", location, "dataQuality object is missing"))
+                continue
+            for schema_name, schema in (("json", json_schema), ("yaml", yaml_schema)):
+                definition = resolve_ref(schema, "#/$defs/DataQuality")
+                validate_instance(
+                    failures,
+                    f"data-quality-example-{schema_name}-schema",
+                    location,
+                    data_quality,
+                    standalone_subschema(schema, definition),
                 )
 
 
@@ -548,7 +566,7 @@ def migrate_singleton_contract(document: dict[str, Any]) -> dict[str, Any]:
     singleton = product["contract"]
     product["contract"] = {"default": singleton}
     migrated["schema"] = "https://opendataproducts.org/v4.2/schema/odps.yaml"
-    migrated["version"] = 4.2
+    migrated["version"] = "4.2"
     return migrated
 
 
@@ -652,7 +670,7 @@ def validate_schema_conformance_fixtures(
 def minimal_document() -> dict[str, Any]:
     return {
         "schema": "https://opendataproducts.org/v4.2/schema/odps.yaml",
-        "version": 4.2,
+        "version": "4.2",
         "product": {
             "details": {
                 "en": {
@@ -816,6 +834,78 @@ def validate_contract_profile_feature(
                 )
         if len(set(outcomes)) != 1:
             failures.append(Failure("contract-profile-parity", case_name, "JSON and YAML schemas disagree"))
+
+
+def validate_data_quality_and_access_feature(
+    failures: list[Failure],
+    json_schema: dict[str, Any],
+    yaml_schema: dict[str, Any],
+) -> None:
+    schemas = (("json", json_schema), ("yaml", yaml_schema))
+    valid_cases = {
+        "quoted version identifier": minimal_document(),
+        "JSONL with zstd compression": with_product_fields(
+            dataAccess={"default": {"outputPortType": "file", "format": "JSONL", "compression": "zstd"}}
+        ),
+        "Parquet without compression": with_product_fields(
+            dataAccess={"default": {"outputPortType": "file", "format": "Parquet"}}
+        ),
+        "Custom data quality string specification": with_product_fields(
+            dataQuality={"executable": [{"type": "Custom", "spec": "check: custom-rule"}]}
+        ),
+        "standard data quality object specification": with_product_fields(
+            dataQuality={"executable": [{"type": "SodaCL", "spec": {"checks": ["row_count > 0"]}}]}
+        ),
+        "SLA hours unit": with_product_fields(
+            SLA={
+                "declarative": {
+                    "default": {
+                        "dimensions": [{"dimension": "responseTime", "objective": 24, "unit": "hours"}]
+                    }
+                }
+            }
+        ),
+        "localized data quality labels": with_product_fields(
+            dataQuality={
+                "declarative": {
+                    "default": {
+                        "displaytitle": {"en": "Baseline quality"},
+                        "description": {"en": "Quality commitment"},
+                        "dimensions": [
+                            {
+                                "dimension": "accuracy",
+                                "displaytitle": {"en": "Accuracy"},
+                                "description": {"en": "Accuracy commitment"},
+                            }
+                        ],
+                    }
+                }
+            }
+        ),
+    }
+    invalid_cases = {
+        "numeric version identifier": {**minimal_document(), "version": 4.2},
+        "unsupported compression": with_product_fields(
+            dataAccess={"default": {"outputPortType": "file", "format": "JSONL", "compression": "brotli"}}
+        ),
+        "standard data quality string specification": with_product_fields(
+            dataQuality={"executable": [{"type": "SodaCL", "spec": "checks: []"}]}
+        ),
+        "legacy data quality displayTitle": with_product_fields(
+            dataQuality={"declarative": {"default": {"displayTitle": {"en": "Baseline quality"}}}}
+        ),
+        "array data quality displaytitle": with_product_fields(
+            dataQuality={"declarative": {"default": {"displaytitle": [{"en": "Baseline quality"}]}}}
+        ),
+        "array data quality description": with_product_fields(
+            dataQuality={"declarative": {"default": {"description": [{"en": "Quality commitment"}]}}}
+        ),
+    }
+
+    for case_name, instance in valid_cases.items():
+        expect_schema_result(failures, "data-quality-access-acceptance", case_name, instance, schemas, True)
+    for case_name, instance in invalid_cases.items():
+        expect_schema_result(failures, "data-quality-access-rejection", case_name, instance, schemas, False)
 
 
 def normalize_type(schema_node: dict[str, Any]) -> set[str]:
@@ -1032,6 +1122,19 @@ def validate_forbidden_drift(failures: list[Failure]) -> None:
                 line = text[: match.start()].count("\n") + 1
                 failures.append(Failure("forbidden-drift", f"{path.relative_to(ROOT)}:{line}", label))
 
+    current_documentation = (
+        sorted(INCLUDES.glob("*.md"))
+        + [SOURCE / "index.html.md", EXAMPLES / "DQ" / "dataquality.yml"]
+        + sorted((EXAMPLES / "Templates").glob("*.yml"))
+    )
+    for path in current_documentation:
+        text = read_text(path)
+        for label, pattern in FORBIDDEN_CURRENT_DOCUMENTATION_PATTERNS.items():
+            match = re.search(pattern, text)
+            if match:
+                line = text[: match.start()].count("\n") + 1
+                failures.append(Failure("forbidden-current-documentation", f"{path.relative_to(ROOT)}:{line}", label))
+
 
 def main() -> int:
     failures: list[Failure] = []
@@ -1048,6 +1151,7 @@ def main() -> int:
     validate_template_family(failures, json_schema, yaml_schema)
     validate_hello_world_text_alignment(failures)
     validate_contract_profile_feature(failures, json_schema, yaml_schema)
+    validate_data_quality_and_access_feature(failures, json_schema, yaml_schema)
     validate_schema_conformance_fixtures(failures, json_schema, yaml_schema)
     validate_forbidden_drift(failures)
 

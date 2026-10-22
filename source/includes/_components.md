@@ -27,7 +27,7 @@ Components:
   slaSets:
     - name: Basic
       description:
-        - en: Default SLA for internal and non-paying users
+        en: Default SLA for internal and non-paying users
       slas:
         - dimension: uptime
           displaytitle:
@@ -43,7 +43,7 @@ Components:
 
     - name: Extended
       description:
-        - en: Premium SLA for external users or partners
+        en: Premium SLA for external users or partners
       slas:
         - dimension: uptime
           displaytitle:
@@ -93,13 +93,15 @@ Each SLA set is anonymous to the parser (in a list), but includes a name for hum
 
 > Example:
 
-```yml 
-components:
-  dataQualities:
-    - dqName: Basic
+```yml
+dataQuality:
+  declarative:
+    default:
+      displaytitle:
+        en: Basic data quality
       description:
-        - en: Minimum acceptable quality for open data publishing
-      metrics:
+        en: Minimum acceptable quality for open data publishing
+      dimensions:
         - dimension: accuracy
           objective: 98
           unit: percentage
@@ -121,13 +123,9 @@ components:
 
 ### Reference from a Pricing Plan or Spec
 
-**By index (for strict referencing):**
+Define named profiles under `dataQuality.declarative` and reference the chosen profile explicitly:
 
-'$ref: "#/components/dataQualities/0"'
-
-**By name (if your tooling supports dereferencing by metadata):**
-
-'dqName: Basic'
+`$ref: "#/product/dataQuality/declarative/default"`
 
 ## Interfaces Component
 

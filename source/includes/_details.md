@@ -9,7 +9,7 @@ The `details` object defines the business and governance details of the data pro
 
 ```yml
 schema: https://opendataproducts.org/v4.2/schema/odps.yaml
-version: 4.2
+version: "4.2"
 product:
   details: 
     en:
@@ -41,7 +41,7 @@ product:
 
 ```yml
 schema: https://opendataproducts.org/v4.2/schema/odps.yaml
-version: 4.2
+version: "4.2"
 product:
   details: 
     en:
