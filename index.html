@@ -695,7 +695,7 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <p>Example of document level usage and structure:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">4.2"</span>
 <span class="na">product</span><span class="pi">:</span>
 </code></pre></div>
 <table><thead>
@@ -732,7 +732,7 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <p>Example of details object usage:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">4.2"</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">details</span><span class="pi">:</span> 
     <span class="na">en</span><span class="pi">:</span>
@@ -801,7 +801,7 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <p>Example of details object usage:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">4.2"</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">details</span><span class="pi">:</span> 
     <span class="na">en</span><span class="pi">:</span>
@@ -1015,7 +1015,7 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 </blockquote>
 <div class="highlight"><pre class="highlight yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
 <span class="c1"># JSON schema: https://opendataproducts.org/v4.2/schema/odps.json</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">4.2"</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">productStrategy</span><span class="pi">:</span>
     <span class="na">status</span><span class="pi">:</span> <span class="s">Planned</span>
@@ -1197,7 +1197,7 @@ Development of the specification is under the umbrella of the Linux Foundation. 
 <p>Example of named Data Contract profiles:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">4.2"</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">contract</span><span class="pi">:</span>
     <span class="na">default</span><span class="pi">:</span>
@@ -1581,7 +1581,7 @@ SLA:
 <tr>
 <td><strong>unit</strong></td>
 <td>attribute</td>
-<td>Options: percent, milliseconds, seconds, minutes, days, weeks, months, years, never, date, null</td>
+<td>Options: percent, milliseconds, seconds, minutes, hours, days, weeks, months, years, never, date, null</td>
 <td>Measurement unit for the SLA objective. If &quot;date&quot; is used, format should be dd/mm/yyyy.</td>
 </tr>
 <tr>
@@ -2644,6 +2644,8 @@ pricingPlans:
 <li>Promote <strong>reusability</strong> by referencing these interfaces throughout the ODPS YAML using <code>$ref</code></li>
 </ul>
 
+<p><code>format</code> names the representation itself. When the delivered bytes are compressed, declare that separately with <code>compression</code>; for example, use <code>format: JSONL</code> and <code>compression: zstd</code>, rather than creating a combined format value.</p>
+
 <p>Including an AI agent-specific access interface (<code>outputPortType: AI</code>) supports MCP-based agent interactions, aligning your product with <strong>AI-native data delivery patterns</strong>.</p>
 <h4 id='referencing-examples'>Referencing Examples</h4>
 <p>For example, the <code>access</code> section in Pricing can reuse a defined method from <code>dataAccess</code> with <code>$ref: &#39;#/product/dataAccess/default&#39;</code>.</p>
@@ -2665,12 +2667,13 @@ pricingPlans:
     <span class="na">accessURL</span><span class="pi">:</span> <span class="s">https://example.org/data/latest-dataset.zip</span>
   <span class="na">dataonly</span><span class="pi">:</span>
     <span class="na">name</span><span class="pi">:</span>
-      <span class="na">en</span><span class="pi">:</span> <span class="s">Access to latest dataset</span>
+      <span class="na">en</span><span class="pi">:</span> <span class="s">Access to compressed JSON Lines dataset</span>
     <span class="na">description</span><span class="pi">:</span> 
-      <span class="na">en</span><span class="pi">:</span> <span class="s">Latest Dataset</span>
+      <span class="na">en</span><span class="pi">:</span> <span class="s">Latest Dataset as JSON Lines compressed with Zstandard</span>
     <span class="na">outputPortType</span><span class="pi">:</span> <span class="s">file</span>
-    <span class="na">format</span><span class="pi">:</span> <span class="s">CSV</span>
-    <span class="na">accessURL</span><span class="pi">:</span> <span class="s">https://example.org/data/latest-dataset.csv</span>
+    <span class="na">format</span><span class="pi">:</span> <span class="s">JSONL</span>
+    <span class="na">compression</span><span class="pi">:</span> <span class="s">zstd</span>
+    <span class="na">accessURL</span><span class="pi">:</span> <span class="s">https://example.org/data/latest-dataset.jsonl.zst</span>
   <span class="na">API</span><span class="pi">:</span>
     <span class="na">name</span><span class="pi">:</span>
       <span class="na">en</span><span class="pi">:</span> <span class="s">Access to API</span>
@@ -2767,8 +2770,14 @@ pricingPlans:
 <tr>
 <td><strong>format</strong></td>
 <td>string</td>
-<td>TOON, JSON, XML, CSV, Excel, zip, plain text, GraphQL, MCP</td>
+<td>TOON, JSON, JSONL, XML, CSV, Excel, Parquet, zip, plain text, GraphQL, MCP</td>
 <td>Specifies the data format made available through this access channel.</td>
+</tr>
+<tr>
+<td><strong>compression</strong></td>
+<td>string</td>
+<td>none, gzip, zstd</td>
+<td>OPTIONAL content compression applied to the delivered representation. Declare the underlying representation in <code>format</code>; for example, <code>format: JSONL</code> with <code>compression: zstd</code>.</td>
 </tr>
 <tr>
 <td><strong>authenticationMethod</strong></td>
@@ -3586,7 +3595,7 @@ Whenever the <code>paymentGateways</code> object is used, a gateway named <code>
 </blockquote>
 <div class="highlight"><pre class="highlight yaml"><code>
 <span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/v4.2/schema/odps.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">4.2</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">4.2"</span>
 <span class="na">product</span><span class="pi">:</span>
   <span class="na">details</span><span class="pi">:</span>
     <span class="na">en</span><span class="pi">:</span>

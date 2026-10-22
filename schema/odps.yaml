@@ -10,12 +10,10 @@ properties:
     description: Defines the URL of Schema. Used often for validation purposes.
     format: uri
   version:
-    type:
-    - string
-    - number
-    description: Current ODPS version.
+    type: string
+    description: Current ODPS version identifier. Quote numeric-looking values in YAML so they remain strings.
     examples:
-    - v4.2
+    - '4.2'
     - dev
   product:
     type: object
@@ -469,6 +467,10 @@ $defs:
         items:
           $ref: '#/$defs/SLADimension'
   DQDefinition:
+    type: object
+    not:
+      required:
+      - displayTitle
     properties:
       displaytitle:
         type: object
@@ -498,13 +500,26 @@ $defs:
         format: uri
         description: Provide URL pointing to the reference documentation.
       spec:
-        type: object
-        description: The content for Data Quality monitoring expressed as code. Accepted as inline YAML, a valid URL pointing
-          to YAML, or a plain string if type is Custom.
+        type:
+        - object
+        - string
+        description: Data Quality monitoring logic. Use an inline YAML object for standard monitoring systems. For type Custom,
+          use an inline YAML object, a URI to an external specification, or a plain string.
       dimensions:
         type: array
         items:
           $ref: '#/$defs/DQDimension'
+    allOf:
+    - if:
+        properties:
+          type:
+            const: Custom
+        required:
+        - type
+      else:
+        properties:
+          spec:
+            type: object
   SLADimension:
     type: object
     description: Defines the SLA dimension.
@@ -539,6 +554,7 @@ $defs:
         - milliseconds
         - seconds
         - minutes
+        - hours
         - days
         - weeks
         - months
@@ -557,6 +573,9 @@ $defs:
   DQDimension:
     type: object
     description: Defines the Data Quality dimension.
+    not:
+      required:
+      - displayTitle
     properties:
       displaytitle:
         type: object
@@ -834,14 +853,24 @@ $defs:
         enum:
         - TOON
         - JSON
+        - JSONL
         - XML
         - CSV
         - Excel
+        - Parquet
         - zip
         - plain text
         - GraphQL
         - MCP
         description: Specifies the data format made available through this access channel.
+      compression:
+        type: string
+        enum:
+        - none
+        - gzip
+        - zstd
+        description: Optional content compression applied to the delivered representation. Declare the underlying format separately;
+          for example, format JSONL with compression zstd.
       authenticationMethod:
         type: string
         enum:
