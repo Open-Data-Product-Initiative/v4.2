@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "ODPS v4.2 Release Candidate schema",
-    "description": "This is the pre-release schema for the ODPS v4.2 Release Candidate. It is not the final ODPS 4.2 release and may change before formal publication.",
+    "title": "ODPS v4.2 schema",
+    "description": "The final ODPS v4.2 schema for interoperable, machine-readable data product metadata.",
     "type": "object",
     "properties": {
         "schema": {
