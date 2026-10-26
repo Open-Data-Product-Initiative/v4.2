@@ -12,13 +12,11 @@ It is designed for **both open and commercial data products**, supporting intero
 
 ---
 
-## ODPS 4.2 Release Candidate (RC) — Reusable Data Contract Profiles
+## ODPS 4.2 — Reusable Data Contract Profiles
 
-> **This is a release candidate, not a final ODPS release.** Use it for review, testing, and implementation feedback. The schema, examples, and migration guidance may change before the formal ODPS 4.2 release; do not present it as a final, stable specification.
+ODPS 4.2 adds named Data Contract profiles under `product.contract`. Inline profile collections require `default`, may include additional contexts such as `internal` or `restricted`, and may be externalized as reusable packages. Data Access profiles can reference the contract profile that governs an interface.
 
-The RC adds named Data Contract profiles under `product.contract`. Inline profile collections require `default`, may include additional contexts such as `internal` or `restricted`, and may be externalized as reusable packages. Data Access profiles can reference the contract profile that governs an interface.
-
-The ODPS 4.1 singleton Contract form is not valid under the v4.2 RC schema. Migrate it under the required `default` profile before validating as v4.2.
+The ODPS 4.1 singleton Contract form is not valid under the v4.2 schema. Migrate it under the required `default` profile before validating as v4.2.
 
 ```yaml
 product:

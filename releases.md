@@ -1,6 +1,6 @@
-# ODPS 4.2 Release Candidate
+# ODPS 4.2
 
-**Status: Release Candidate (RC), not a formal or final ODPS release.** This repository, its schemas, examples, and migration guidance are published for review, testing, and implementation feedback. They may change before the formal ODPS 4.2 release and must not be represented as a final, stable specification.
+**Status: Final release.** This repository contains the authoritative ODPS 4.2 schemas, examples, migration guidance, and conformance fixtures.
 
 See more from 
 * https://governance.opendataproducts.org/v1/specification/releases

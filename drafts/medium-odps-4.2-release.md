@@ -1,6 +1,6 @@
-# ODPS 4.2 Release Candidate: Making Data Contracts Reusable and Explicit
+# ODPS 4.2: Making Data Contracts Reusable and Explicit
 
-ODPS 4.2 is a focused release candidate, not a broad redesign of the Open Data Product Specification. The main change is how a data product declares the contracts that govern it.
+ODPS 4.2 is a focused release, not a broad redesign of the Open Data Product Specification. The main change is how a data product declares the contracts that govern it.
 
 In ODPS 4.1, `product.contract` described one Contract. That works when a product has a single contractual context. It becomes limiting when the same product serves several audiences, delivery channels, or governance contexts. An internal API, a partner data share, and a restricted analyst export can have different contracts, while still belonging to the same data product.
 
@@ -103,9 +103,9 @@ ODPS 4.2 does not replace the broader product model introduced in v4.1. The `pro
 
 The release also does not turn the Data Product Operating Framework or the Open Data Products SDK into normative parts of ODPS. The framework helps organizations direct, define, operate, and assure data products; the SDK provides implementation tooling. ODPS remains the machine-readable specification for an individual product.
 
-## What is included in the release candidate
+## What is included in ODPS 4.2
 
-The release candidate contains more than prose describing the new model:
+ODPS 4.2 contains more than prose describing the new model:
 
 - JSON and YAML schemas express the same profile-oriented rules;
 - examples cover inline profiles, individual external profiles, external profile packages, and Data Access bindings;
@@ -120,7 +120,7 @@ Data products rarely have one universal contractual context. The same product ma
 
 ODPS 4.2 gives these contexts stable names, makes the link from an access interface to its Contract explicit, and allows common profiles to be reused across products. The result is a smaller conceptual change than a new product model, but an important one for operating data products across teams, platforms, and governance boundaries.
 
-The release candidate is ready for review by specification users and tool builders. Existing v4.1 documents with singleton Contracts should be migrated and validated against the v4.2 schema before adopting the new version in production workflows.
+ODPS 4.2 is ready for specification users and tool builders. Existing v4.1 documents with singleton Contracts should be migrated and validated against the v4.2 schema before adopting the new version in production workflows.
 
 ---
 

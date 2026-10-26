@@ -1,5 +1,5 @@
 ---
-title: Open Data Product Specification 4.2 Release Candidate | Linux Foundation
+title: Open Data Product Specification 4.2 | Linux Foundation
 
 language_tabs: # must be one of https://git.io/vQNgJ
 - yaml
@@ -35,14 +35,14 @@ code_clipboard: true
 
 meta:
   - name: description
-    content: ODPS 4.2 Release Candidate (RC), a pre-release specification for review and implementation feedback. It is not the final ODPS 4.2 release.
+    content: ODPS 4.2 is the final specification for interoperable, machine-readable data product metadata.
 ---
 
 # OPEN DATA PRODUCT SPECIFICATION - The Linux Foundation
 
-## Version 4.2 Release Candidate (RC)
+## Version 4.2
 
-> **Release Candidate — not a final ODPS release.** This v4.2 RC is published for review, testing, and implementation feedback. Its schema, examples, and migration guidance may change before the formal ODPS 4.2 release. Do not present or depend on this RC as a final, stable version of the specification.
+> **Final release.** ODPS 4.2 defines the stable schemas, examples, migration guidance, and conformance fixtures for this version of the specification.
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in BCP 14 ([RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) and [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)) when, and only when, they appear in all capitals, as shown here.
 
@@ -51,10 +51,10 @@ Development of the specification is under the umbrella of the Linux Foundation.
 
 | Topic | Link | Description |
 |---|---|---|
-| Version source | <a href="https://github.com/Open-Data-Product-Initiative/v4.2">ODPS 4.2 Release Candidate on GitHub</a> | RC source repository; not the final ODPS 4.2 release |
-| ODPS YAML schema | <a href="https://opendataproducts.org/v4.2/schema/odps.yaml">YAML Schema</a> | Machine-readable RC schema definition in YAML format |
-| ODPS JSON schema | <a href="https://opendataproducts.org/v4.2/schema/odps.json">JSON Schema</a> | Machine-readable RC schema definition in JSON format |
-| Migration guide | [Migration guide available](#odps-4-1-4-2-migration-guide) | RC guidance for testing an upgrade from ODPS 4.1 to 4.2 |
+| Version source | <a href="https://github.com/Open-Data-Product-Initiative/v4.2">ODPS 4.2 on GitHub</a> | Authoritative source repository for ODPS 4.2 |
+| ODPS YAML schema | <a href="https://opendataproducts.org/v4.2/schema/odps.yaml">YAML Schema</a> | Machine-readable ODPS 4.2 schema definition in YAML format |
+| ODPS JSON schema | <a href="https://opendataproducts.org/v4.2/schema/odps.json">JSON Schema</a> | Machine-readable ODPS 4.2 schema definition in JSON format |
+| Migration guide | [Migration guide available](#odps-4-1-4-2-migration-guide) | Guidance for upgrading from ODPS 4.1 to 4.2 |
 | Knowledge Base | [ODPS Knowledge Base](https://opendataproducts.org/howto/) | Practical examples, FAQs, and implementation guidance |
 | Contribute | [Raise an issue in GitHub](https://github.com/Open-Data-Product-Initiative/v4.2/issues) | Submit issues or suggestions to the specification maintainers |
 
